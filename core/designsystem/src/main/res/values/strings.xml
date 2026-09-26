@@ -5,4 +5,5 @@
     <string name="base_error_server">Something went wrong on the server.</string>
     <string name="base_error_unknown">Something went wrong.</string>
     <string name="base_retry">Retry</string>
+    <string name="base_back">Back</string>
 </resources>
