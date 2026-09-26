@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!--
+        Strict Lint Mode — all issues are errors unless explicitly overridden below.
+        To suppress a module-specific issue, add a lint-baseline.xml in that module's root.
+        Run: ./gradlew updateLintBaseline
+    -->
+
+    <!-- ── Suppress noisy infra checks ──────────────────────────── -->
+    <issue id="GoogleAppIndexingWarning"     severity="ignore" />
+    <issue id="AllowBackup"                  severity="ignore" />
+    <issue id="GradleDependency"             severity="ignore" />
+    <issue id="NewerVersionAvailable"        severity="ignore" />
+    <!-- AGP pinned to 9.1.1 intentionally; 9.2.0 is tracked separately. -->
+    <issue id="AndroidGradlePluginVersion"   severity="ignore" />
+
+    <!-- ── Security ─────────────────────────────────────────────── -->
+    <issue id="SetJavaScriptEnabled"         severity="error" />
+    <issue id="HardcodedDebugMode"           severity="error" />
+    <issue id="UnsafeImplicitIntentLaunch"   severity="error" />
+
+    <!-- ── Accessibility ─────────────────────────────────────────── -->
+    <issue id="ContentDescription"           severity="error" />
+    <issue id="LabelFor"                     severity="error" />
+
+    <!-- ── Correctness ───────────────────────────────────────────── -->
+    <issue id="WrongConstant"                severity="error" />
+    <issue id="InvalidUsesTagAttribute"      severity="error" />
+
+    <!-- ── Performance ───────────────────────────────────────────── -->
+    <issue id="DrawAllocation"               severity="error" />
+    <issue id="ViewHolder"                   severity="error" />
+    <!-- VectorPath: design-tool-generated icon assets; negligible impact at 24dp -->
+    <issue id="VectorPath"                   severity="ignore" />
+
+    <!-- ── Internationalisation ──────────────────────────────────── -->
+    <issue id="HardcodedText"                severity="error" />
+</lint>
