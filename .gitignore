@@ -1,0 +1,80 @@
+# Built application files
+*.apk
+*.aab
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/
+**/build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Android Studio
+*.iml
+.idea/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Keystore files
+*.jks
+*.keystore
+
+# Google Services (Uncomment if using Firebase and checking in your key)
+# google-services.json
+
+# Android Profiling
+*.hprof
+
+# Proguard
+mapping/
+
+# Log files
+*.log
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Captures
+/captures
+
+# NDK
+obj/
+
+# IntelliJ
+*.iws
+/out/
+
+# Kotlin
+.kotlin/
+
+# secrets or env
+*.env
+
+# Claude Code local settings (machine-specific, not shared)
+.claude/settings.local.json
