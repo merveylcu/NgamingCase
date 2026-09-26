@@ -1,17 +1,23 @@
 package com.merveylcu.ngamingcase.feature.posts.presentation.postlist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -20,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
@@ -37,9 +44,12 @@ import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.Pos
 import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListEmptyContent
 import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListErrorContent
 import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListItem
+import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListSwipeToDeleteContainer
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 @Composable
 fun PostListScreen(
@@ -51,11 +61,24 @@ fun PostListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
 
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(viewModel, snackbarHostState) {
         viewModel.uiEffect.collect { effect ->
+            // A new message replaces the current one; a dismissed undo snackbar confirms that delete.
+            snackbarHostState.currentSnackbarData?.dismiss()
             when (effect) {
-                is PostListUiEffect.ShowError ->
+                is PostListUiEffect.ShowUndoDelete -> launch {
+                    showUndoDeleteSnackbar(
+                        snackbarHostState = snackbarHostState,
+                        message = resources.getString(R.string.post_list_deleted),
+                        actionLabel = resources.getString(R.string.post_list_undo),
+                        onUndo = { viewModel.onUndoDelete(effect.postId) },
+                        onConfirm = { viewModel.onDeleteConfirm(effect.postId) },
+                    )
+                }
+
+                is PostListUiEffect.ShowError -> launch {
                     snackbarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
+                }
             }
         }
     }
@@ -66,8 +89,32 @@ fun PostListScreen(
         onRefresh = viewModel::onRefresh,
         onRetry = viewModel::onRetry,
         onPostClick = onPostClick,
+        onDelete = viewModel::onDelete,
         modifier = modifier,
     )
+}
+
+/**
+ * Leaving the screen (or rotating) while the snackbar is visible cancels it. That is treated like
+ * a timeout, so a hidden post is never left without its API delete.
+ */
+private suspend fun showUndoDeleteSnackbar(
+    snackbarHostState: SnackbarHostState,
+    message: String,
+    actionLabel: String,
+    onUndo: () -> Unit,
+    onConfirm: () -> Unit,
+) {
+    val result = try {
+        snackbarHostState.showSnackbar(message = message, actionLabel = actionLabel, duration = SnackbarDuration.Short)
+    } catch (e: CancellationException) {
+        onConfirm()
+        throw e
+    }
+    when (result) {
+        SnackbarResult.ActionPerformed -> onUndo()
+        SnackbarResult.Dismissed -> onConfirm()
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,6 +125,7 @@ internal fun PostListContent(
     onRefresh: () -> Unit,
     onRetry: () -> Unit,
     onPostClick: (Int) -> Unit,
+    onDelete: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -107,7 +155,7 @@ internal fun PostListContent(
                 if (state.posts.isEmpty()) {
                     PostListEmptyContent()
                 } else {
-                    PostList(posts = state.posts, onPostClick = onPostClick)
+                    PostList(posts = state.posts, onPostClick = onPostClick, onDelete = onDelete)
                 }
             }
         }
@@ -118,18 +166,51 @@ internal fun PostListContent(
 private fun PostList(
     posts: ImmutableList<Post>,
     onPostClick: (Int) -> Unit,
+    onDelete: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val currentOnPostClick by rememberUpdatedState(onPostClick)
-    LazyColumn(modifier = modifier.fillMaxSize()) {
+    val currentOnDelete by rememberUpdatedState(onDelete)
+    val listState = rememberLazyListState()
+
+    RevealRestoredPostEffect(posts = posts, listState = listState)
+
+    LazyColumn(state = listState, modifier = modifier.fillMaxSize()) {
         itemsIndexed(items = posts, key = { _, post -> post.id }) { index, post ->
-            Column(modifier = Modifier.animateItem()) {
-                PostListItem(post = post, onClick = { currentOnPostClick(post.id) })
+            // No fade-out: the row has already been swiped away. A fading row stays composed with its
+            // dismissed swipe state, so an undo during the fade would delete it again.
+            Column(modifier = Modifier.animateItem(fadeOutSpec = null)) {
+                PostListSwipeToDeleteContainer(onDelete = { currentOnDelete(post.id) }) {
+                    PostListItem(
+                        post = post,
+                        onClick = { currentOnPostClick(post.id) },
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                    )
+                }
                 if (index < posts.lastIndex) {
                     // Starts where the text starts, after the image.
                     HorizontalDivider(modifier = Modifier.padding(start = PostItemPadding * 2 + PostImageSize))
                 }
             }
+        }
+    }
+}
+
+/**
+ * LazyColumn keeps its scroll position anchored to the first visible row's key, so a post restored
+ * (undo, or a failed API delete) right above that row would be inserted off screen. Scroll to it.
+ */
+@Composable
+private fun RevealRestoredPostEffect(posts: ImmutableList<Post>, listState: LazyListState) {
+    val previousIds = remember { mutableSetOf<Int>() }
+    LaunchedEffect(posts) {
+        val insertedIndex = if (previousIds.isEmpty()) -1 else posts.indexOfFirst { it.id !in previousIds }
+        previousIds.clear()
+        previousIds.addAll(posts.map { it.id })
+        // Let the list lay out the new items first so firstVisibleItemIndex is up to date.
+        withFrameNanos { }
+        if (insertedIndex in 0 until listState.firstVisibleItemIndex) {
+            listState.animateScrollToItem(insertedIndex)
         }
     }
 }
@@ -148,6 +229,7 @@ private fun PostListContentPreview() {
             onRefresh = {},
             onRetry = {},
             onPostClick = {},
+            onDelete = {},
         )
     }
 }
@@ -162,6 +244,7 @@ private fun PostListContentEmptyPreview() {
             onRefresh = {},
             onRetry = {},
             onPostClick = {},
+            onDelete = {},
         )
     }
 }
@@ -176,6 +259,7 @@ private fun PostListContentErrorPreview() {
             onRefresh = {},
             onRetry = {},
             onPostClick = {},
+            onDelete = {},
         )
     }
 }

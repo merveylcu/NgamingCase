@@ -3,9 +3,12 @@ package com.merveylcu.ngamingcase.feature.posts.presentation.postlist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.merveylcu.ngamingcase.core.common.result.RestResult
+import com.merveylcu.ngamingcase.feature.posts.domain.usecase.ConfirmDeletePostUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.IsPostCacheEmptyUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.ObservePostsUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.RefreshPostsUseCase
+import com.merveylcu.ngamingcase.feature.posts.domain.usecase.RestorePostUseCase
+import com.merveylcu.ngamingcase.feature.posts.domain.usecase.SoftDeletePostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
@@ -25,6 +28,9 @@ class PostListViewModel @Inject constructor(
     observePosts: ObservePostsUseCase,
     private val isPostCacheEmpty: IsPostCacheEmptyUseCase,
     private val refreshPosts: RefreshPostsUseCase,
+    private val softDeletePost: SoftDeletePostUseCase,
+    private val restorePost: RestorePostUseCase,
+    private val confirmDeletePost: ConfirmDeletePostUseCase,
 ) : ViewModel() {
 
     // Everything except the posts themselves, which always come from Room.
@@ -68,6 +74,26 @@ class PostListViewModel @Inject constructor(
             } else {
                 requestState.update { it.copy(error = null) }
             }
+        }
+    }
+
+    /** Hides the post right away; the API call waits until the undo window closes. */
+    fun onDelete(postId: Int) {
+        viewModelScope.launch {
+            softDeletePost(postId)
+            _uiEffect.send(PostListUiEffect.ShowUndoDelete(postId))
+        }
+    }
+
+    fun onUndoDelete(postId: Int) {
+        viewModelScope.launch { restorePost(postId) }
+    }
+
+    /** The repository restores the post itself if the API call fails. */
+    fun onDeleteConfirm(postId: Int) {
+        viewModelScope.launch {
+            val result = confirmDeletePost(postId)
+            if (result is RestResult.Error) _uiEffect.send(PostListUiEffect.ShowError(result.error))
         }
     }
 
