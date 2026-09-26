@@ -66,7 +66,8 @@ class PostListViewModel @Inject constructor(
             val result = refreshPosts()
             requestState.update { it.copy(isRefreshing = false) }
             if (result is RestResult.Error) {
-                if (uiState.value.posts.isEmpty()) {
+                // Ask Room rather than uiState: uiState is only up to date while the UI collects it.
+                if (isPostCacheEmpty()) {
                     requestState.update { it.copy(error = result.error) }
                 } else {
                     _uiEffect.send(PostListUiEffect.ShowError(result.error))
