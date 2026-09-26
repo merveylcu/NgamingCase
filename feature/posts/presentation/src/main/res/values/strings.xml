@@ -1,0 +1,4 @@
+<resources>
+    <string name="post_list_title">Posts</string>
+    <string name="post_list_empty">No posts</string>
+</resources>

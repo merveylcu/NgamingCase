@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">NgamingCase</string>
-    <string name="posts_title">Posts</string>
+    <string name="post_detail_placeholder">Post %1$d</string>
 </resources>
