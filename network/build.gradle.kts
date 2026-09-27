@@ -19,7 +19,6 @@ configure<LibraryExtension> {
 dependencies {
     implementation(projects.core.common)
 
-    implementation(libs.androidx.core.ktx)
     implementation(libs.bundles.network)
     implementation(libs.bundles.coroutines)
 }
