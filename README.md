@@ -53,17 +53,19 @@ The UI only observes Room. The network is used to fill and update Room.
 ### Modules
 
 ```
-:app                          Application, MainActivity, navigation wiring
+:app                          Application, MainActivity
 :core:common                  Result and error types, dispatcher qualifier
 :core:designsystem            Theme, shared resources
 :core:database                Room database, DAO, entity
 :core:testing                 Test helpers
 :network                      OkHttp, Retrofit, JSON setup
-:navigation                   Destinations and NavHost
+:navigation                   NavHost and Navigator, no feature routes
 :feature:posts:domain         Model, repository interface, use cases
 :feature:posts:data           Repository implementation, API, DTO, mappers
-:feature:posts:presentation   Screens and ViewModels
+:feature:posts:presentation   Screens, ViewModels, routes and nav entries
 ```
+
+Each feature owns its routes and registers its screens through an `EntryProviderScope` extension (`postsEntries`), so `MainActivity` only lists features and does not grow with every new screen.
 
 Shared Gradle setup lives in `build-logic` as convention plugins. Dependencies are in `gradle/libs.versions.toml`.
 

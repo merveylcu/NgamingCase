@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ngamingcase.android.library.compose)
     alias(libs.plugins.ngamingcase.android.hilt)
     alias(libs.plugins.ngamingcase.testing)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 configure<LibraryExtension> {
@@ -13,6 +14,7 @@ configure<LibraryExtension> {
 dependencies {
     implementation(projects.feature.posts.domain)
     implementation(projects.core.designsystem)
+    implementation(projects.navigation)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
@@ -21,6 +23,7 @@ dependencies {
     implementation(libs.bundles.coil)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.kotlinx.serialization.core)
 
     testImplementation(projects.core.testing)
     testImplementation(libs.truth)
