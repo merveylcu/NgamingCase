@@ -12,7 +12,8 @@ class AndroidVersioningConventionPlugin : Plugin<Project> {
                     val versionProps = Properties().also { props ->
                         rootProject.file("version.properties").inputStream().use(props::load)
                     }
-                    defaultConfig.versionCode = versionProps.getProperty("VERSION_CODE").trim().toInt()
+                    defaultConfig.versionCode =
+                        versionProps.getProperty("VERSION_CODE").trim().toInt()
                     defaultConfig.versionName = versionProps.getProperty("VERSION_NAME").trim()
 
                     val gitSha = runCatching {

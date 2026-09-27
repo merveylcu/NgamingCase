@@ -63,7 +63,14 @@ class PostDaoTest {
             ),
         )
 
-        dao.mergeRemote(listOf(post(1, "remote 1"), post(2, "remote 2"), post(3, "remote 3"), post(4, "remote 4")))
+        dao.mergeRemote(
+            listOf(
+                post(1, "remote 1"),
+                post(2, "remote 2"),
+                post(3, "remote 3"),
+                post(4, "remote 4"),
+            ),
+        )
 
         assertThat(dao.getById(1)).isEqualTo(post(1, title = "deleted", isDeleted = true))
         assertThat(dao.getById(2)).isEqualTo(post(2, title = "edited", isLocallyModified = true))

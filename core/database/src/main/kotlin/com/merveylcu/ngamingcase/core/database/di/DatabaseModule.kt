@@ -11,6 +11,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+private const val DATABASE_NAME = "ngamingcase.db"
+
 @Module
 @InstallIn(SingletonComponent::class)
 public object DatabaseModule {
@@ -20,7 +22,7 @@ public object DatabaseModule {
     public fun provideDatabase(@ApplicationContext context: Context): NgamingCaseDatabase = Room.databaseBuilder(
         context,
         NgamingCaseDatabase::class.java,
-        "ngamingcase.db",
+        DATABASE_NAME,
     ).build()
 
     @Provides
