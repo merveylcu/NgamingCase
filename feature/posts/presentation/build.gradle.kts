@@ -13,7 +13,9 @@ configure<LibraryExtension> {
 
 dependencies {
     implementation(projects.feature.posts.domain)
+    implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
     implementation(projects.navigation)
 
     implementation(platform(libs.androidx.compose.bom))

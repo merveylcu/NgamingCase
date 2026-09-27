@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
-import com.merveylcu.ngamingcase.core.designsystem.extension.toMessageRes
+import com.merveylcu.ngamingcase.core.ui.extension.toMessageRes
 import com.merveylcu.ngamingcase.core.designsystem.R as DesignR
 
 @Composable

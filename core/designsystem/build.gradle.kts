@@ -9,8 +9,6 @@ configure<LibraryExtension> {
 }
 
 dependencies {
-    api(projects.core.common)
-
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
 }

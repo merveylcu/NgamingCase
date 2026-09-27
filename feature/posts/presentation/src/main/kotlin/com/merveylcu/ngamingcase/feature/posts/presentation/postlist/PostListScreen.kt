@@ -35,8 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
-import com.merveylcu.ngamingcase.core.designsystem.extension.toMessageRes
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
+import com.merveylcu.ngamingcase.core.ui.extension.toMessageRes
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
 import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostImageSize

@@ -27,6 +27,7 @@ rootProject.name = "NgamingCase"
 include(":app")
 include(":core:common")
 include(":core:designsystem")
+include(":core:ui")
 include(":core:database")
 include(":core:testing")
 include(":navigation")
