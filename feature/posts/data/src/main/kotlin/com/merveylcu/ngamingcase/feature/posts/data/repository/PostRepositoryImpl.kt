@@ -20,11 +20,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-/**
- * jsonplaceholder accepts writes but never persists them, so Room is the single source of truth:
- * the UI only observes Room and the network only feeds it. Deletes are tombstoned and edits are
- * flagged so that a refresh never brings back a deleted post or overwrites a local edit.
- */
 internal class PostRepositoryImpl @Inject constructor(
     private val api: PostApi,
     private val dao: PostDao,

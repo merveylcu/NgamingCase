@@ -12,9 +12,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImage
 
-/**
- * Decorative circular post image with a neutral circle while loading or on error.
- */
 @Composable
 internal fun PostImage(
     url: String,

@@ -6,9 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
-/**
- * In-memory [PostDao]. `mergeRemote` is inherited from the interface, so the real merge logic is tested.
- */
 internal class FakePostDao(initial: List<PostEntity> = emptyList()) : PostDao {
 
     private val table = MutableStateFlow(initial.associateBy { it.id })

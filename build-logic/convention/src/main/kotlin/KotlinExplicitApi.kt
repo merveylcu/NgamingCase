@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 internal fun Project.configureKotlinExplicitApi() {
     tasks.withType<KotlinCompile>()
-        // Only production code is an API surface; test sources stay free of visibility modifiers.
         .matching { !it.name.contains("Test") }
         .configureEach {
             compilerOptions.freeCompilerArgs.add("-Xexplicit-api=strict")

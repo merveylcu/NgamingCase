@@ -63,7 +63,6 @@ fun PostListScreen(
 
     LaunchedEffect(viewModel, snackbarHostState) {
         viewModel.uiEffect.collect { effect ->
-            // A new message replaces the current one; a dismissed undo snackbar confirms that delete.
             snackbarHostState.currentSnackbarData?.dismiss()
             when (effect) {
                 is PostListUiEffect.ShowUndoDelete -> launch {
@@ -94,10 +93,6 @@ fun PostListScreen(
     )
 }
 
-/**
- * Leaving the screen (or rotating) while the snackbar is visible cancels it. That is treated like
- * a timeout, so a hidden post is never left without its API delete.
- */
 private suspend fun showUndoDeleteSnackbar(
     snackbarHostState: SnackbarHostState,
     message: String,
@@ -177,8 +172,6 @@ private fun PostList(
 
     LazyColumn(state = listState, modifier = modifier.fillMaxSize()) {
         itemsIndexed(items = posts, key = { _, post -> post.id }) { index, post ->
-            // No fade-out: the row has already been swiped away. A fading row stays composed with its
-            // dismissed swipe state, so an undo during the fade would delete it again.
             Column(modifier = Modifier.animateItem(fadeOutSpec = null)) {
                 PostListSwipeToDeleteContainer(onDelete = { currentOnDelete(post.id) }) {
                     PostListItem(
@@ -188,7 +181,6 @@ private fun PostList(
                     )
                 }
                 if (index < posts.lastIndex) {
-                    // Starts where the text starts, after the image.
                     HorizontalDivider(modifier = Modifier.padding(start = PostItemPadding * 2 + PostImageSize))
                 }
             }
@@ -196,10 +188,6 @@ private fun PostList(
     }
 }
 
-/**
- * LazyColumn keeps its scroll position anchored to the first visible row's key, so a post restored
- * (undo, or a failed API delete) right above that row would be inserted off screen. Scroll to it.
- */
 @Composable
 private fun RevealRestoredPostEffect(posts: ImmutableList<Post>, listState: LazyListState) {
     val previousIds = remember { mutableSetOf<Int>() }
@@ -207,7 +195,6 @@ private fun RevealRestoredPostEffect(posts: ImmutableList<Post>, listState: Lazy
         val insertedIndex = if (previousIds.isEmpty()) -1 else posts.indexOfFirst { it.id !in previousIds }
         previousIds.clear()
         previousIds.addAll(posts.map { it.id })
-        // Let the list lay out the new items first so firstVisibleItemIndex is up to date.
         withFrameNanos { }
         if (insertedIndex in 0 until listState.firstVisibleItemIndex) {
             listState.animateScrollToItem(insertedIndex)

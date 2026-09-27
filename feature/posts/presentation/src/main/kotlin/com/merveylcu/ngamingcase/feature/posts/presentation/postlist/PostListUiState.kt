@@ -9,6 +9,5 @@ data class PostListUiState(
     val posts: ImmutableList<Post> = persistentListOf(),
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
-    /** Shown full screen only while there is nothing to list. */
     val error: ErrorEntity? = null,
 )

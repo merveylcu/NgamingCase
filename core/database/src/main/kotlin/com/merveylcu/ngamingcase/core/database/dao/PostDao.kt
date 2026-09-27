@@ -34,9 +34,6 @@ public interface PostDao {
     @Query("UPDATE posts SET isDeleted = :deleted WHERE id = :id")
     public suspend fun setDeleted(id: Int, deleted: Boolean)
 
-    /**
-     * Writes server data without touching deleted or locally modified posts.
-     */
     @Transaction
     public suspend fun mergeRemote(remote: List<PostEntity>) {
         val protectedIds = getProtectedIds().toSet()

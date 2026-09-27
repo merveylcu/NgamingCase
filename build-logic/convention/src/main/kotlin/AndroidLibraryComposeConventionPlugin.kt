@@ -19,9 +19,6 @@ class AndroidLibraryComposeConventionPlugin : Plugin<Project> {
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
-                // Required for Compose Preview rendering in Android Studio.
-                // ui-tooling-preview (in the compose bundle) only provides the annotation;
-                // ui-tooling provides ComposeViewAdapter which the IDE needs at debug time.
                 "debugImplementation"(libs.findLibrary("androidx-compose-ui-tooling").get())
             }
         }

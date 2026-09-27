@@ -20,10 +20,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-/**
- * The edited title and body live in [SavedStateHandle], so they survive rotation and process death.
- * `null` means "not edited yet"; the post's own value is shown until the user types.
- */
 @HiltViewModel(assistedFactory = PostDetailViewModel.Factory::class)
 class PostDetailViewModel @AssistedInject constructor(
     @Assisted private val postId: Int,
@@ -74,7 +70,6 @@ class PostDetailViewModel @AssistedInject constructor(
         isSaving.value = true
         viewModelScope.launch {
             when (val result = updatePost(id = postId, title = state.title, body = state.body)) {
-                // Keep isSaving until the screen closes so Save can't be tapped twice.
                 is RestResult.Success -> _uiEffect.send(PostDetailUiEffect.NavigateBack)
 
                 is RestResult.Error -> {

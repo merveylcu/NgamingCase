@@ -14,16 +14,12 @@ class KotlinLibraryConventionPlugin : Plugin<Project> {
             pluginManager.apply("com.android.lint")
 
             extensions.configure<KotlinJvmProjectExtension> {
-                // JVM_TOOLCHAIN: which JDK version runs the compiler.
-                // jvmTarget: which JVM bytecode version is produced (Android-compatible).
                 jvmToolchain(ProjectConfig.JVM_TOOLCHAIN)
                 compilerOptions {
                     jvmTarget.set(JvmTarget.JVM_11)
                 }
             }
 
-            // Align Java bytecode target with Kotlin's jvmTarget to avoid
-            // "Inconsistent JVM-target compatibility" Gradle validation error.
             extensions.configure<JavaPluginExtension> {
                 sourceCompatibility = JavaVersion.VERSION_11
                 targetCompatibility = JavaVersion.VERSION_11

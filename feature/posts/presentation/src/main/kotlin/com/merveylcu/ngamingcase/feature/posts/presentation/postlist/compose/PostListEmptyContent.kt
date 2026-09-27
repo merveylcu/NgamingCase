@@ -12,9 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
 
-/**
- * Scrollable so that pull-to-refresh still works on an empty list.
- */
 @Composable
 internal fun PostListEmptyContent(modifier: Modifier = Modifier) {
     Box(

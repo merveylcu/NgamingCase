@@ -18,13 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import com.merveylcu.ngamingcase.core.designsystem.R as DesignR
 
-/**
- * Only end-to-start swipes delete. The row disappears because the post is removed from Room.
- *
- * The state is deliberately not saveable: `rememberSwipeToDismissBoxState` uses `rememberSaveable`,
- * and LazyColumn restores saved state by item key. A post brought back with Undo would then come
- * back already dismissed and delete itself again.
- */
 @Composable
 internal fun PostListSwipeToDeleteContainer(
     onDelete: () -> Unit,

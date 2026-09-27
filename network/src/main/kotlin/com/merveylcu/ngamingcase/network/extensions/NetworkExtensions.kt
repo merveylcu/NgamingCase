@@ -14,9 +14,6 @@ import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 import kotlin.coroutines.cancellation.CancellationException
 
-/**
- * Runs [call] and maps any failure to an [ErrorEntity]. Cancellation is never swallowed.
- */
 @Suppress("TooGenericExceptionCaught")
 public suspend fun <T> safeApiCall(call: suspend () -> T): RestResult<T> = try {
     RestResult.Success(call())

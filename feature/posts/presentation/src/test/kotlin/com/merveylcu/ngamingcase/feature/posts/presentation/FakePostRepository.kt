@@ -7,9 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
-/**
- * In-memory [PostRepository] whose network results can be set per test.
- */
 class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepository {
 
     private val visible = MutableStateFlow(initialPosts)
@@ -32,7 +29,6 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
 
     override suspend fun refresh(): RestResult<Unit> {
         if (refreshResult is RestResult.Success) {
-            // Upsert like Room: remote posts overwrite by id, deleted ones stay hidden.
             val merged = visible.value.associateBy { it.id } + remotePosts.associateBy { it.id }
             visible.value = merged.values.filterNot { it.id in deleted }.sortedBy { it.id }
         }

@@ -10,9 +10,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 
-/**
- * Each entry gets its own ViewModelStore, so a screen's ViewModel is cleared when it is popped.
- */
 @Composable
 public fun NgamingCaseNavHost(
     backStack: NavBackStack<NavKey>,

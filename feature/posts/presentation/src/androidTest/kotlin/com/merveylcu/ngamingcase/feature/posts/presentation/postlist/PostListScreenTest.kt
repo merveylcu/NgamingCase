@@ -31,7 +31,6 @@ class PostListScreenTest {
     @OptIn(DelicateCoilApi::class)
     @Before
     fun setUp() {
-        // No network fetchers: images stay on their placeholder instead of hitting picsum.photos.
         SingletonImageLoader.setUnsafe(
             ImageLoader.Builder(ApplicationProvider.getApplicationContext())
                 .serviceLoaderEnabled(false)

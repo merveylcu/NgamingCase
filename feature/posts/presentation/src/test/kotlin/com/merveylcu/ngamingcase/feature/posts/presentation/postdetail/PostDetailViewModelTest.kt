@@ -62,7 +62,6 @@ class PostDetailViewModelTest {
 
         viewModel.onTitleChange("new title")
 
-        // A recreated ViewModel (rotation, process death) restores the edit from the handle.
         viewModel(FakePostRepository(listOf(post)), savedStateHandle).uiState.test {
             val state = expectMostRecentItem()
             assertThat(state.title).isEqualTo("new title")

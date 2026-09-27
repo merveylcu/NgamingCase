@@ -12,10 +12,8 @@ public interface PostRepository {
     public suspend fun softDelete(id: Int)
     public suspend fun restore(id: Int)
 
-    /** Sends the delete to the API. Restores the post if the call fails. */
     public suspend fun confirmDelete(id: Int): RestResult<Unit>
 
-    /** Sends the update to the API first. The local copy is written only on success. */
     public suspend fun updatePost(
         id: Int,
         title: String,

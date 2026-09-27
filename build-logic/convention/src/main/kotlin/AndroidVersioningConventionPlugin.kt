@@ -9,8 +9,6 @@ class AndroidVersioningConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.withPlugin("com.android.application") {
                 extensions.configure<ApplicationExtension> {
-                    // versionCode and versionName are the single source of truth in
-                    // version.properties at the project root. Edit that file to release.
                     val versionProps = Properties().also { props ->
                         rootProject.file("version.properties").inputStream().use(props::load)
                     }

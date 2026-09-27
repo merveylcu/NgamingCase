@@ -44,9 +44,6 @@ private val DarkColorScheme = darkColorScheme(
     onErrorContainer = Red90,
 )
 
-/**
- * App theme. Dynamic color is intentionally disabled so the app looks the same on every device.
- */
 @Composable
 fun NgamingCaseTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     MaterialTheme(

@@ -33,7 +33,6 @@ class PostListViewModel @Inject constructor(
     private val confirmDeletePost: ConfirmDeletePostUseCase,
 ) : ViewModel() {
 
-    // Everything except the posts themselves, which always come from Room.
     private val requestState = MutableStateFlow(PostListUiState(isLoading = true))
 
     val uiState: StateFlow<PostListUiState> = combine(observePosts(), requestState) { posts, state ->
@@ -52,7 +51,6 @@ class PostListViewModel @Inject constructor(
             if (isPostCacheEmpty()) {
                 load()
             } else {
-                // Show the cache right away and refresh quietly in the background.
                 requestState.update { it.copy(isLoading = false) }
                 refreshPosts()
             }
@@ -66,7 +64,6 @@ class PostListViewModel @Inject constructor(
             val result = refreshPosts()
             requestState.update { it.copy(isRefreshing = false) }
             if (result is RestResult.Error) {
-                // Ask Room rather than uiState: uiState is only up to date while the UI collects it.
                 if (isPostCacheEmpty()) {
                     requestState.update { it.copy(error = result.error) }
                 } else {
@@ -78,7 +75,6 @@ class PostListViewModel @Inject constructor(
         }
     }
 
-    /** Hides the post right away; the API call waits until the undo window closes. */
     fun onDelete(postId: Int) {
         viewModelScope.launch {
             softDeletePost(postId)
@@ -90,7 +86,6 @@ class PostListViewModel @Inject constructor(
         viewModelScope.launch { restorePost(postId) }
     }
 
-    /** The repository restores the post itself if the API call fails. */
     fun onDeleteConfirm(postId: Int) {
         viewModelScope.launch {
             val result = confirmDeletePost(postId)
