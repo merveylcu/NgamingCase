@@ -3,6 +3,7 @@ import com.android.build.api.dsl.LibraryExtension
 plugins {
     alias(libs.plugins.ngamingcase.android.library)
     alias(libs.plugins.ngamingcase.android.hilt)
+    alias(libs.plugins.ngamingcase.testing)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -21,4 +22,6 @@ dependencies {
 
     implementation(libs.bundles.network)
     implementation(libs.bundles.coroutines)
+
+    testImplementation(libs.truth)
 }
