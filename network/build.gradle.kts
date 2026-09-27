@@ -7,13 +7,15 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val baseUrl: String = providers.gradleProperty("baseUrl").get()
+
 configure<LibraryExtension> {
     namespace = "com.merveylcu.ngamingcase.network"
     buildFeatures {
         buildConfig = true
     }
     defaultConfig {
-        buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.typicode.com/\"")
+        buildConfigField("String", "BASE_URL", "\"$baseUrl\"")
     }
 }
 

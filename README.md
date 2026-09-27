@@ -103,6 +103,12 @@ Requirements: Android Studio (latest stable), JDK 17.
 ./gradlew assembleDebug
 ```
 
+The API base URL is set in `gradle.properties` (`baseUrl`) and can be overridden per build:
+
+```bash
+./gradlew assembleDebug -PbaseUrl=https://example.com/
+```
+
 ## Tests
 
 ```bash
