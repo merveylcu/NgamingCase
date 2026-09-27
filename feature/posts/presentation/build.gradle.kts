@@ -24,4 +24,10 @@ dependencies {
 
     testImplementation(projects.core.testing)
     testImplementation(libs.truth)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
