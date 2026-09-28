@@ -8,7 +8,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 @Immutable
-data class Colors(
+data class NgamingCaseColors(
     val isDark: Boolean,
     val primary: Color,
     val onPrimary: Color,
@@ -28,7 +28,7 @@ data class Colors(
     val onErrorContainer: Color,
 )
 
-internal val LightColors = Colors(
+internal val LightColors = NgamingCaseColors(
     isDark = false,
     primary = Indigo40,
     onPrimary = Slate99,
@@ -48,7 +48,7 @@ internal val LightColors = Colors(
     onErrorContainer = Red10,
 )
 
-internal val DarkColors = Colors(
+internal val DarkColors = NgamingCaseColors(
     isDark = true,
     primary = Indigo80,
     onPrimary = Indigo20,
@@ -70,7 +70,7 @@ internal val DarkColors = Colors(
 
 internal val LocalColors = staticCompositionLocalOf { LightColors }
 
-internal fun Colors.toColorScheme(): ColorScheme {
+internal fun NgamingCaseColors.toColorScheme(): ColorScheme {
     val base = if (isDark) darkColorScheme() else lightColorScheme()
     return base.copy(
         primary = primary,

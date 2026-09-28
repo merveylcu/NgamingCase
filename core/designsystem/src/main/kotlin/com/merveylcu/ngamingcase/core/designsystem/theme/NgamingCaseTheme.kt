@@ -29,7 +29,7 @@ fun NgamingCaseTheme(
 }
 
 object NgamingCaseTheme {
-    val colors: Colors
+    val colors: NgamingCaseColors
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
