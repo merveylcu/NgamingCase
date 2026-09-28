@@ -10,13 +10,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -53,8 +53,9 @@ class PostDetailViewModel @AssistedInject constructor(
         initialValue = PostDetailUiState(),
     )
 
-    private val _uiEffect = Channel<PostDetailUiEffect>(Channel.BUFFERED)
-    val uiEffect: Flow<PostDetailUiEffect> = _uiEffect.receiveAsFlow()
+    private val _uiEffect =
+        MutableSharedFlow<PostDetailUiEffect>(extraBufferCapacity = EFFECT_BUFFER_CAPACITY)
+    val uiEffect: SharedFlow<PostDetailUiEffect> = _uiEffect.asSharedFlow()
 
     fun onTitleChange(title: String) {
         savedStateHandle[KEY_TITLE] = title
@@ -70,11 +71,11 @@ class PostDetailViewModel @AssistedInject constructor(
         isSaving.value = true
         viewModelScope.launch {
             when (val result = updatePost(id = postId, title = state.title, body = state.body)) {
-                is RestResult.Success -> _uiEffect.send(PostDetailUiEffect.NavigateBack)
+                is RestResult.Success -> _uiEffect.emit(PostDetailUiEffect.NavigateBack)
 
                 is RestResult.Error -> {
                     isSaving.value = false
-                    _uiEffect.send(PostDetailUiEffect.ShowError(result.error))
+                    _uiEffect.emit(PostDetailUiEffect.ShowError(result.error))
                 }
             }
         }
@@ -85,13 +86,13 @@ class PostDetailViewModel @AssistedInject constructor(
         when {
             state.isSaving -> Unit
             state.isDirty -> isDiscardDialogVisible.value = true
-            else -> viewModelScope.launch { _uiEffect.send(PostDetailUiEffect.NavigateBack) }
+            else -> viewModelScope.launch { _uiEffect.emit(PostDetailUiEffect.NavigateBack) }
         }
     }
 
     fun onDiscardConfirm() {
         isDiscardDialogVisible.value = false
-        viewModelScope.launch { _uiEffect.send(PostDetailUiEffect.NavigateBack) }
+        viewModelScope.launch { _uiEffect.emit(PostDetailUiEffect.NavigateBack) }
     }
 
     fun onDiscardDismiss() {
@@ -107,5 +108,6 @@ class PostDetailViewModel @AssistedInject constructor(
         const val KEY_TITLE = "title"
         const val KEY_BODY = "body"
         const val STOP_TIMEOUT_MILLIS = 5_000L
+        const val EFFECT_BUFFER_CAPACITY = 16
     }
 }
