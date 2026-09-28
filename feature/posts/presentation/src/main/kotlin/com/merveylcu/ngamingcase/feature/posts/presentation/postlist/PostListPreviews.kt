@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
+import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListContent
 import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListItem
 import kotlinx.collections.immutable.toImmutableList
 
