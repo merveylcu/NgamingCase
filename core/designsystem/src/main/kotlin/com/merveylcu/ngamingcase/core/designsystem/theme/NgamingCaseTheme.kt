@@ -13,6 +13,7 @@ fun NgamingCaseTheme(
     dimens: NgamingCaseDimens = NgamingCaseDimens(),
     typography: NgamingCaseTypography = DefaultTypography,
     shapes: NgamingCaseShapes = NgamingCaseShapes(),
+    iconSizes: NgamingCaseIconSizes = NgamingCaseIconSizes(),
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
@@ -25,6 +26,7 @@ fun NgamingCaseTheme(
         LocalDimens provides dimens,
         LocalTypography provides typography,
         LocalShapes provides shapes,
+        LocalIconSizes provides iconSizes,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
@@ -55,4 +57,9 @@ object NgamingCaseTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalShapes.current
+
+    val iconSizes: NgamingCaseIconSizes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalIconSizes.current
 }

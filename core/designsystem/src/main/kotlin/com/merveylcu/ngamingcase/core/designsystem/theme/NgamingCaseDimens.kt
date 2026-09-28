@@ -12,8 +12,6 @@ data class NgamingCaseDimens(
     val spacingMd: Dp = 16.dp,
     val spacingLg: Dp = 24.dp,
     val spacingXl: Dp = 32.dp,
-    val iconMd: Dp = 24.dp,
-    val iconLg: Dp = 48.dp,
     val imageSm: Dp = 56.dp,
     val imageLg: Dp = 120.dp,
     val progressStrokeWidth: Dp = 2.dp,

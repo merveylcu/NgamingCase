@@ -864,6 +864,7 @@ Compose:
     allowedCompositionLocals:
       - LocalColors
       - LocalDimens
+      - LocalIconSizes
       - LocalShapes
       - LocalTypography
   CompositionLocalNaming:
