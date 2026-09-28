@@ -1,4 +1,4 @@
-package com.merveylcu.ngamingcase.feature.posts.presentation.postlist
+package com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -8,8 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
-import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListContent
-import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListItem
+import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.PostListUiState
 import kotlinx.collections.immutable.toImmutableList
 
 private val previewPosts = List(5) { index ->
@@ -38,7 +37,11 @@ private fun PostListContentPreview(state: PostListUiState) {
 @Preview
 @Composable
 private fun PostListPreview() {
-    PostListContentPreview(state = PostListUiState(posts = previewPosts))
+    PostListContentPreview(
+        state = PostListUiState(
+            posts = previewPosts,
+        ),
+    )
 }
 
 @Preview

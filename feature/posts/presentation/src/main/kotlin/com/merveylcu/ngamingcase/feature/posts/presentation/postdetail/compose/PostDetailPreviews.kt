@@ -1,4 +1,4 @@
-package com.merveylcu.ngamingcase.feature.posts.presentation.postdetail
+package com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.compose
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
-import com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.compose.PostDetailContent
+import com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.PostDetailUiState
 
 private val previewPost = Post(
     id = 1,
@@ -60,5 +60,10 @@ private fun PostDetailEmptyTitlePreview() {
 @Preview
 @Composable
 private fun PostDetailNotFoundPreview() {
-    PostDetailContentPreview(state = PostDetailUiState(isLoading = false, notFound = true))
+    PostDetailContentPreview(
+        state = PostDetailUiState(
+            isLoading = false,
+            notFound = true,
+        ),
+    )
 }
