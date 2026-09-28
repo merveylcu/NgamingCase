@@ -11,10 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.merveylcu.ngamingcase.core.designsystem.component.image.NgamingAsyncImage
 import com.merveylcu.ngamingcase.core.designsystem.component.textfield.NgamingTextField
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
-import com.merveylcu.ngamingcase.feature.posts.presentation.compose.PostImage
 
 private const val BODY_MIN_LINES = 4
 
@@ -36,7 +36,7 @@ internal fun PostDetailForm(
         verticalArrangement = Arrangement.spacedBy(NgamingCaseTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        PostImage(url = imageUrl, size = NgamingCaseTheme.dimens.imageLg)
+        NgamingAsyncImage(url = imageUrl, size = NgamingCaseTheme.dimens.imageLg)
         NgamingTextField(
             value = title,
             onValueChange = onTitleChange,

@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.merveylcu.ngamingcase.core.designsystem.component.button.NgamingButton
 import com.merveylcu.ngamingcase.core.designsystem.component.button.NgamingTextButton
 import com.merveylcu.ngamingcase.core.designsystem.component.dialog.NgamingDialog
+import com.merveylcu.ngamingcase.core.designsystem.component.image.NgamingAsyncImage
 import com.merveylcu.ngamingcase.core.designsystem.component.progress.NgamingProgressIndicator
 import com.merveylcu.ngamingcase.core.designsystem.component.text.NgamingText
 import com.merveylcu.ngamingcase.core.designsystem.component.textfield.NgamingTextField
@@ -75,5 +76,13 @@ private fun NgamingDialogPreview() {
             title = "Discard changes?",
             dismissText = "Keep editing",
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun NgamingAsyncImagePreview() {
+    NgamingCaseTheme {
+        NgamingAsyncImage(url = "", size = NgamingCaseTheme.dimens.imageSm)
     }
 }

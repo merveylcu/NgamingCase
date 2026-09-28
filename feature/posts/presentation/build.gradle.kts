@@ -21,7 +21,6 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.bundles.lifecycle)
-    implementation(libs.bundles.coil)
     implementation(libs.hilt.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.serialization.core)
@@ -32,5 +31,6 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.coil.compose)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

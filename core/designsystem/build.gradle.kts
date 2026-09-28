@@ -14,4 +14,5 @@ dependencies {
     implementation(projects.core.ui)
 
     implementation(libs.bundles.compose)
+    implementation(libs.bundles.coil)
 }

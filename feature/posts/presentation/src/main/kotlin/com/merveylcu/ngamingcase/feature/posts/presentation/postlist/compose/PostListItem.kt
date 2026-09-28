@@ -10,10 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.merveylcu.ngamingcase.core.designsystem.component.image.NgamingAsyncImage
 import com.merveylcu.ngamingcase.core.designsystem.component.text.NgamingText
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
-import com.merveylcu.ngamingcase.feature.posts.presentation.compose.PostImage
 
 @Composable
 internal fun PostListItem(
@@ -30,7 +30,7 @@ internal fun PostListItem(
         horizontalArrangement = Arrangement.spacedBy(NgamingCaseTheme.spacing.md),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        PostImage(url = post.imageUrl, size = NgamingCaseTheme.dimens.imageSm)
+        NgamingAsyncImage(url = post.imageUrl, size = NgamingCaseTheme.dimens.imageSm)
         Column(modifier = Modifier.weight(1f)) {
             NgamingText(
                 text = post.title,
