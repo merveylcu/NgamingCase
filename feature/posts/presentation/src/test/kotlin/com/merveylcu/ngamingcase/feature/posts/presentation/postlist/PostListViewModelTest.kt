@@ -141,6 +141,6 @@ class PostListViewModelTest {
     }
 
     private fun posts(count: Int) = List(count) { index ->
-        Post(id = index + 1, title = "title ${index + 1}", body = "body")
+        Post(id = index + 1, title = "title ${index + 1}", body = "body", imageUrl = "")
     }
 }

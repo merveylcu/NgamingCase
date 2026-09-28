@@ -18,7 +18,7 @@ class PostDetailViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val post = Post(id = 1, title = "title", body = "body")
+    private val post = Post(id = 1, title = "title", body = "body", imageUrl = "")
     private val networkError = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET)
 
     private fun viewModel(

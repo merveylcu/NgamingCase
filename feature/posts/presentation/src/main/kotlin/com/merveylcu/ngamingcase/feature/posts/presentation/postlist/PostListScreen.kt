@@ -220,6 +220,7 @@ private val previewPosts = List(5) { index ->
         id = index + 1,
         title = "Post title ${index + 1}",
         body = "Short description of the post number ${index + 1}.",
+        imageUrl = "",
     )
 }.toImmutableList()
 

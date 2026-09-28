@@ -65,8 +65,13 @@ class PostListScreenTest {
                 PostListUiState(
                     posts =
                         persistentListOf(
-                            Post(id = 1, title = "First title", body = "First body"),
-                            Post(id = 2, title = "Second title", body = "Second body"),
+                            Post(id = 1, title = "First title", body = "First body", imageUrl = ""),
+                            Post(
+                                id = 2,
+                                title = "Second title",
+                                body = "Second body",
+                                imageUrl = "",
+                            ),
                         ),
                 ),
             onPostClick = { clickedId = it },

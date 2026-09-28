@@ -2,6 +2,7 @@ package com.merveylcu.ngamingcase.feature.posts.data.mapper
 
 import com.merveylcu.ngamingcase.core.database.entity.PostEntity
 import com.merveylcu.ngamingcase.feature.posts.data.remote.dto.PostDto
+import com.merveylcu.ngamingcase.feature.posts.data.remote.postImageUrl
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 
 internal fun PostDto.toEntity(): PostEntity = PostEntity(
@@ -22,4 +23,5 @@ internal fun PostEntity.toPost(): Post = Post(
     id = id,
     title = title,
     body = body,
+    imageUrl = postImageUrl(id),
 )

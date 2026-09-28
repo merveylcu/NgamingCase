@@ -74,7 +74,7 @@ Shared Gradle setup lives in `build-logic` as convention plugins. Dependencies a
 
 **Room is the single source of truth.** JSONPlaceholder accepts `PUT` and `DELETE` but never saves the changes, so a refresh would bring deleted posts back and undo edits. Deleted posts are kept as tombstones (`isDeleted`) and edited posts are flagged (`isLocallyModified`). A refresh never overwrites either of them.
 
-**Images use the post id, not the list position.** With the position, every image below a deleted row would change. The URL is `https://picsum.photos/300/300?random={id}&grayscale`.
+**Images use the post id, not the list position.** With the position, every image below a deleted row would change. The URL (`https://picsum.photos/300/300?random={id}&grayscale`) is built in the data layer; the domain `Post` model only carries the resulting `imageUrl` and does not know where images come from.
 
 **Delete and undo.** A swipe hides the post right away and shows a snackbar with Undo. The `DELETE` request is sent only after the snackbar closes without Undo. If the request fails, the post comes back and an error is shown.
 
