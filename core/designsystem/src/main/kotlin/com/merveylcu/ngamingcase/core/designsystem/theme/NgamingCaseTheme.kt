@@ -12,20 +12,24 @@ fun NgamingCaseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dimens: NgamingCaseDimens = NgamingCaseDimens(),
     typography: NgamingCaseTypography = DefaultTypography,
+    shapes: NgamingCaseShapes = NgamingCaseShapes(),
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
     val colorScheme = remember(colors) { colors.toColorScheme() }
     val materialTypography = remember(typography) { typography.toTypography() }
+    val materialShapes = remember(shapes) { shapes.toShapes() }
 
     CompositionLocalProvider(
         LocalColors provides colors,
         LocalDimens provides dimens,
         LocalTypography provides typography,
+        LocalShapes provides shapes,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = materialTypography,
+            shapes = materialShapes,
             content = content,
         )
     }
@@ -46,4 +50,9 @@ object NgamingCaseTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalTypography.current
+
+    val shapes: NgamingCaseShapes
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalShapes.current
 }

@@ -1,7 +1,6 @@
 package com.merveylcu.ngamingcase.feature.posts.presentation.compose
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,6 +29,6 @@ internal fun PostImage(
         modifier =
             modifier
                 .size(size)
-                .clip(CircleShape),
+                .clip(NgamingCaseTheme.shapes.full),
     )
 }
