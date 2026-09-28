@@ -11,6 +11,7 @@ import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.ObservePostUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.UpdatePostUseCase
 import com.merveylcu.ngamingcase.feature.posts.presentation.FakePostRepository
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -82,7 +83,21 @@ class PostDetailViewModelTest {
     }
 
     @Test
-    fun `failed save shows an error and keeps the edited text`() = runTest {
+    fun `saving shows the loading overlay until the request finishes`() = runTest {
+        val gate = CompletableDeferred<Unit>()
+        val repository = FakePostRepository(listOf(post)).apply { updateGate = gate }
+        val viewModel = viewModel(repository)
+        viewModel.onTitleChange("new title")
+
+        viewModel.onSave()
+        assertThat((viewModel.uiState.value as BaseUiState.Content).isLoading).isTrue()
+
+        gate.complete(Unit)
+        assertThat((viewModel.uiState.value as BaseUiState.Content).isLoading).isFalse()
+    }
+
+    @Test
+    fun `failed save shows the error dialog and keeps the edited text`() = runTest {
         val repository = FakePostRepository(listOf(post)).apply {
             updateResult = RestResult.Error(networkError)
         }
@@ -92,14 +107,15 @@ class PostDetailViewModelTest {
 
         viewModel.uiEffect.test {
             viewModel.onSave()
-            assertThat(awaitItem()).isEqualTo(PostDetailUiEffect.ShowError(networkError))
+            expectNoEvents()
         }
 
-        val state = viewModel.uiState.value.content()
-        assertThat(state.title).isEqualTo("new title")
-        assertThat(state.body).isEqualTo("new body")
-        assertThat(state.isSaving).isFalse()
-        assertThat(state.canSave).isTrue()
+        val state = viewModel.uiState.value as BaseUiState.Content
+        assertThat(state.dialogState).isNotNull()
+        assertThat(state.isLoading).isFalse()
+        assertThat(state.data.title).isEqualTo("new title")
+        assertThat(state.data.body).isEqualTo("new body")
+        assertThat(state.data.canSave).isTrue()
         assertThat(repository.posts.single()).isEqualTo(post)
     }
 

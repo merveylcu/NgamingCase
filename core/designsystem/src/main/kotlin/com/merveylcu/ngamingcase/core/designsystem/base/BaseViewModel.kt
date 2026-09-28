@@ -1,9 +1,16 @@
 package com.merveylcu.ngamingcase.core.designsystem.base
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.merveylcu.ngamingcase.core.common.UiText
 import com.merveylcu.ngamingcase.core.common.base.BaseUiState
 import com.merveylcu.ngamingcase.core.common.base.DialogState
 import com.merveylcu.ngamingcase.core.common.base.UiEffect
+import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
+import com.merveylcu.ngamingcase.core.common.result.RestResult
+import com.merveylcu.ngamingcase.core.designsystem.R
+import com.merveylcu.ngamingcase.core.ui.extension.toMessageRes
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -11,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<S, E : UiEffect> : ViewModel() {
 
@@ -52,20 +60,63 @@ abstract class BaseViewModel<S, E : UiEffect> : ViewModel() {
     }
 
     protected fun showDialog(dialog: DialogState) {
-        updateDialogState(dialog)
+        _uiState.update { current ->
+            if (current is BaseUiState.Content) current.copy(dialogState = dialog) else current
+        }
     }
 
     protected fun dismissDialog() {
-        updateDialogState(null)
+        _uiState.update { current ->
+            if (current is BaseUiState.Content) current.copy(dialogState = null) else current
+        }
     }
 
     protected fun emitEffect(effect: E) {
         _uiEffect.tryEmit(effect)
     }
 
-    private fun updateDialogState(dialog: DialogState?) {
+    protected fun <T> Flow<RestResult<T>>.request(
+        showLoading: Boolean = true,
+        onError: ((ErrorEntity) -> Unit)? = null,
+        onSuccess: (T) -> Unit = {},
+    ) {
+        viewModelScope.launch {
+            collect { result ->
+                when (result) {
+                    is RestResult.Loading -> if (showLoading) setLoadingOverlay(result.isLoading)
+
+                    is RestResult.Success -> {
+                        if (showLoading) setLoadingOverlay(false)
+                        onSuccess(result.data)
+                    }
+
+                    is RestResult.Error -> {
+                        if (showLoading) setLoadingOverlay(false)
+                        (onError ?: ::handleError)(result.error)
+                    }
+                }
+            }
+        }
+    }
+
+    protected open fun handleError(error: ErrorEntity) {
+        if (_uiState.value is BaseUiState.Content) {
+            showDialog(
+                DialogState(
+                    message = UiText.StringResource(error.toMessageRes()),
+                    confirmText = UiText.StringResource(R.string.base_ok),
+                    onConfirm = ::dismissDialog,
+                    onDismiss = ::dismissDialog,
+                ),
+            )
+        } else {
+            setState(BaseUiState.Error(error))
+        }
+    }
+
+    private fun setLoadingOverlay(isLoading: Boolean) {
         _uiState.update { current ->
-            if (current is BaseUiState.Content) current.copy(dialogState = dialog) else current
+            if (current is BaseUiState.Content) current.copy(isLoading = isLoading) else current
         }
     }
 

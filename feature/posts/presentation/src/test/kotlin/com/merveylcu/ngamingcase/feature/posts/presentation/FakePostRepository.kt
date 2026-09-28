@@ -14,6 +14,7 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
 
     var remotePosts: List<Post> = emptyList()
     var refreshGate: CompletableDeferred<Unit>? = null
+    var updateGate: CompletableDeferred<Unit>? = null
     var refreshResult: RestResult<Unit> = RestResult.Success(Unit)
     var confirmDeleteResult: RestResult<Unit> = RestResult.Success(Unit)
     var updateResult: RestResult<Unit> = RestResult.Success(Unit)
@@ -62,6 +63,7 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
         title: String,
         body: String,
     ): RestResult<Unit> {
+        updateGate?.await()
         if (updateResult is RestResult.Success) {
             visible.value =
                 visible.value.map { if (it.id == id) it.copy(title = title, body = body) else it }

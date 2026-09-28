@@ -8,20 +8,20 @@ import com.merveylcu.ngamingcase.core.designsystem.component.text.NgamingText
 
 @Composable
 fun NgamingDialog(
-    title: String,
     message: String,
     confirmText: String,
     onConfirm: () -> Unit,
-    dismissText: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    title: String? = null,
+    dismissText: String? = null,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         modifier = modifier,
-        title = { NgamingText(text = title) },
+        title = title?.let { { NgamingText(text = it) } },
         text = { NgamingText(text = message) },
         confirmButton = { NgamingTextButton(text = confirmText, onClick = onConfirm) },
-        dismissButton = { NgamingTextButton(text = dismissText, onClick = onDismiss) },
+        dismissButton = dismissText?.let { { NgamingTextButton(text = it, onClick = onDismiss) } },
     )
 }

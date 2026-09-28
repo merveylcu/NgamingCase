@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.merveylcu.ngamingcase.core.common.base.BaseUiState
 import com.merveylcu.ngamingcase.core.designsystem.component.dialog.NgamingDialog
+import com.merveylcu.ngamingcase.core.designsystem.component.dialog.NgamingLoadingDialog
 import com.merveylcu.ngamingcase.core.designsystem.component.progress.NgamingProgressIndicator
 import com.merveylcu.ngamingcase.core.designsystem.component.state.NgamingErrorContent
 import com.merveylcu.ngamingcase.core.designsystem.extension.asString
@@ -35,14 +36,17 @@ fun <S> BaseScreen(
 
             is BaseUiState.Content -> {
                 content(uiState.data)
+                if (uiState.isLoading) {
+                    NgamingLoadingDialog()
+                }
                 uiState.dialogState?.let { dialog ->
                     NgamingDialog(
-                        title = dialog.title.asString(),
                         message = dialog.message.asString(),
                         confirmText = dialog.confirmText.asString(),
                         onConfirm = dialog.onConfirm,
-                        dismissText = dialog.dismissText.asString(),
                         onDismiss = dialog.onDismiss,
+                        title = dialog.title?.asString(),
+                        dismissText = dialog.dismissText?.asString(),
                     )
                 }
             }

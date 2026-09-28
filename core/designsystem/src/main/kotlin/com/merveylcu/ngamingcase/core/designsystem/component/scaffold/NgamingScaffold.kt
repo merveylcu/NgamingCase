@@ -9,15 +9,15 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun NgamingScaffold(
-    snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState? = null,
     topBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
         topBar = topBar,
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = { snackBarHostState?.let { SnackbarHost(it) } },
         content = content,
     )
 }

@@ -80,7 +80,9 @@ Shared Gradle setup lives in `build-logic` as convention plugins. Dependencies a
 
 **Update.** Save sends `PUT` first and writes to Room only if it succeeds. On failure, the entered text is kept and an error is shown. Edited text is stored in `SavedStateHandle`, so it survives rotation and process death.
 
-**Refresh.** On first launch the list is loaded from the API. Later launches show the cache at once and refresh in the background. If a refresh fails while there is content, only a snackbar is shown.
+**Refresh.** On first launch the list is loaded from the API. Later launches show the cache at once and refresh in the background. If a refresh fails while there is content, the list is kept and an error dialog is shown.
+
+**Loading and errors are handled in one place.** Use cases return `Flow<RestResult<T>>` that emits loading, the result and loading again (`resultFlow` / `buildDefaultFlow`). ViewModels extend `BaseViewModel` and consume it with `request()`: the base class shows the loading overlay and, unless the screen handles the error itself, shows an error dialog when there is content or a full-screen error with Retry when there is not. `BaseScreen` draws these states, so screens only draw their content.
 
 ### Requirement mapping
 

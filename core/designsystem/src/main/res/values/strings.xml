@@ -1,4 +1,5 @@
 <resources>
     <string name="base_retry">Retry</string>
     <string name="base_back">Back</string>
+    <string name="base_ok">OK</string>
 </resources>

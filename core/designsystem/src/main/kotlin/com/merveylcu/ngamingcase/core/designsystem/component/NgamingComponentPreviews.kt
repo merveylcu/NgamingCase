@@ -10,7 +10,6 @@ import com.merveylcu.ngamingcase.core.designsystem.component.button.NgamingButto
 import com.merveylcu.ngamingcase.core.designsystem.component.button.NgamingTextButton
 import com.merveylcu.ngamingcase.core.designsystem.component.dialog.NgamingDialog
 import com.merveylcu.ngamingcase.core.designsystem.component.progress.NgamingProgressIndicator
-import com.merveylcu.ngamingcase.core.designsystem.component.progress.NgamingSmallProgressIndicator
 import com.merveylcu.ngamingcase.core.designsystem.component.text.NgamingText
 import com.merveylcu.ngamingcase.core.designsystem.component.textfield.NgamingTextField
 import com.merveylcu.ngamingcase.core.designsystem.component.topbar.NgamingTopBar
@@ -45,7 +44,6 @@ private fun NgamingTextAndButtonsPreview() {
             NgamingButton(text = "Retry", onClick = {})
             NgamingTextButton(text = "Save", onClick = {}, enabled = false)
             NgamingProgressIndicator()
-            NgamingSmallProgressIndicator()
         }
     }
 }
@@ -70,12 +68,12 @@ private fun NgamingTextFieldPreview() {
 private fun NgamingDialogPreview() {
     NgamingCaseTheme {
         NgamingDialog(
-            title = "Discard changes?",
             message = "Your unsaved changes will be lost.",
             confirmText = "Discard",
             onConfirm = {},
-            dismissText = "Keep editing",
             onDismiss = {},
+            title = "Discard changes?",
+            dismissText = "Keep editing",
         )
     }
 }

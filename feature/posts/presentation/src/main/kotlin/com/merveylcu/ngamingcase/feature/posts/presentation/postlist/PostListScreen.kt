@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalResources
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.merveylcu.ngamingcase.core.ui.extension.toMessageRes
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
 import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListContent
 import kotlinx.coroutines.launch
@@ -34,10 +33,6 @@ fun PostListScreen(onPostClick: (Int) -> Unit, viewModel: PostListViewModel = hi
                         onUndo = { viewModel.onUndoDelete(effect.postId) },
                         onConfirm = { viewModel.onDeleteConfirm(effect.postId) },
                     )
-                }
-
-                is PostListUiEffect.ShowError -> launch {
-                    snackBarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
                 }
             }
         }

@@ -8,6 +8,9 @@ public sealed interface BaseUiState<out S> {
 
     public data class Error(val error: ErrorEntity) : BaseUiState<Nothing>
 
-    public data class Content<out S>(val data: S, val dialogState: DialogState? = null) :
-        BaseUiState<S>
+    public data class Content<out S>(
+        val data: S,
+        val isLoading: Boolean = false,
+        val dialogState: DialogState? = null,
+    ) : BaseUiState<S>
 }

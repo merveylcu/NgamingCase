@@ -94,20 +94,17 @@ class PostListViewModelTest {
     }
 
     @Test
-    fun `refresh failure with content keeps the posts and emits an error effect`() = runTest {
+    fun `refresh failure with content keeps the posts and shows the error dialog`() = runTest {
         val repository = FakePostRepository(initialPosts = posts(2))
         val viewModel = viewModel(repository)
         repository.refreshResult = RestResult.Error(networkError)
 
-        viewModel.uiEffect.test {
-            viewModel.onRefresh()
-            assertThat(awaitItem()).isEqualTo(PostListUiEffect.ShowError(networkError))
-        }
-        viewModel.uiState.test {
-            val state = expectMostRecentItem().content()
-            assertThat(state.posts).hasSize(2)
-            assertThat(state.isRefreshing).isFalse()
-        }
+        viewModel.onRefresh()
+
+        val state = viewModel.uiState.value as BaseUiState.Content
+        assertThat(state.data.posts).hasSize(2)
+        assertThat(state.data.isRefreshing).isFalse()
+        assertThat(state.dialogState).isNotNull()
     }
 
     @Test
@@ -130,21 +127,22 @@ class PostListViewModelTest {
     }
 
     @Test
-    fun `failed delete confirmation restores the post and emits an error effect`() = runTest {
+    fun `failed delete confirmation restores the post and shows the error dialog`() = runTest {
         val repository = FakePostRepository(initialPosts = posts(2)).apply {
             confirmDeleteResult = RestResult.Error(networkError)
         }
         val viewModel = viewModel(repository)
+        viewModel.onDelete(1)
 
-        viewModel.uiEffect.test {
-            viewModel.onDelete(1)
-            assertThat(awaitItem()).isEqualTo(PostListUiEffect.ShowUndoDelete(postId = 1))
+        viewModel.onDeleteConfirm(1)
 
-            viewModel.onDeleteConfirm(1)
-            assertThat(awaitItem()).isEqualTo(PostListUiEffect.ShowError(networkError))
-        }
         assertThat(repository.confirmedDeleteIds).containsExactly(1)
-        assertThat(repository.posts.map { it.id }).containsExactly(1, 2).inOrder()
+        assertThat(
+            viewModel.uiState.value.content().posts.map {
+                it.id
+            },
+        ).containsExactly(1, 2).inOrder()
+        assertThat((viewModel.uiState.value as BaseUiState.Content).dialogState).isNotNull()
     }
 
     private fun BaseUiState<PostListUiState>.content(): PostListUiState =

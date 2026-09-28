@@ -24,7 +24,6 @@ internal fun PostDetailForm(
     title: String,
     body: String,
     isTitleValid: Boolean,
-    enabled: Boolean,
     onTitleChange: (String) -> Unit,
     onBodyChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -43,7 +42,6 @@ internal fun PostDetailForm(
             onValueChange = onTitleChange,
             label = stringResource(R.string.post_detail_title_label),
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             singleLine = true,
             errorText = if (isTitleValid) {
                 null
@@ -58,7 +56,6 @@ internal fun PostDetailForm(
             onValueChange = onBodyChange,
             label = stringResource(R.string.post_detail_body_label),
             modifier = Modifier.fillMaxWidth(),
-            enabled = enabled,
             minLines = BODY_MIN_LINES,
         )
     }
