@@ -18,7 +18,6 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.navigation)
 
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.bundles.lifecycle)
@@ -30,7 +29,6 @@ dependencies {
     testImplementation(projects.core.testing)
     testImplementation(libs.truth)
 
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.test.runner)

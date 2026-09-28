@@ -10,7 +10,6 @@ configure<LibraryExtension> {
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     api(libs.navigation3.runtime)
     implementation(libs.navigation3.ui)
