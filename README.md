@@ -56,17 +56,43 @@ Each feature registers its own screens with an `EntryProviderScope` extension (`
 
 ## Notes on the implementation
 
-JSONPlaceholder accepts `PUT` and `DELETE` but doesn't save anything. Without a local copy, a refresh would bring deleted posts back and undo edits. Room is the source of truth: the UI observes Room, and the network only writes into it. Deleted posts are kept with an `isDeleted` flag and edited posts with `isLocallyModified`, and a refresh skips both.
+### Offline first with Room
 
-The image URL uses the post id instead of the list position (`https://picsum.photos/300/300?random={id}&grayscale`). With the position, every image below a deleted row would change. The URL is built in the data layer, so the domain model only has an `imageUrl`.
+- JSONPlaceholder accepts `PUT` and `DELETE` but doesn't actually save anything.
+- The UI only reads from Room. The network just writes into Room.
+- Deleted posts are kept with `isDeleted`, edited posts are marked with `isLocallyModified`.
+- A refresh skips both, so deleted posts don't come back and edits aren't overwritten.
 
-Swiping a post hides it right away and shows a snackbar with Undo. The `DELETE` request goes out only after the snackbar closes without Undo. If it fails, the post is restored and an error is shown.
+### Images
 
-Saving sends `PUT` first and writes to Room only when it succeeds. If it fails, the entered text stays on screen. The edited text is kept in `SavedStateHandle`, so it survives rotation and process death.
+- The image URL uses the post id, not the list position: `https://picsum.photos/300/300?random={id}&grayscale`.
+- With the position, every image below a deleted row would change.
+- The URL is built in the data layer. The domain model only has `imageUrl`.
 
-On the first launch the list is loaded from the API. After that the cached list is shown immediately and refreshed in the background. If a refresh fails while there are posts on screen, the list stays and an error dialog is shown.
+### Delete and undo
 
-Loading and error handling is shared. Use cases return `Flow<RestResult<T>>` (loading, result, loading done), and ViewModels extending `BaseViewModel` collect it with `request()`. The base class shows a loading overlay and handles errors: an error dialog if the screen has content, a full screen error with Retry if it doesn't. `BaseScreen` renders these states, so each screen only renders its own content.
+1. Swiping hides the post right away and shows a snackbar with Undo.
+2. `DELETE` is sent only if the snackbar closes without Undo.
+3. If the request fails, the post is restored and an error is shown.
+
+### Editing
+
+- Save sends `PUT` first and writes to Room only if it succeeds.
+- If it fails, the entered text stays on screen.
+- The text is kept in `SavedStateHandle`, so it survives rotation and process death.
+
+### Refresh
+
+- First launch: the list is loaded from the API.
+- Later launches: the cached list shows immediately and refreshes in the background.
+- If a refresh fails while posts are on screen, the list stays and an error dialog is shown.
+
+### Loading and errors
+
+- Use cases return `Flow<RestResult<T>>`: loading, result, loading done.
+- ViewModels extend `BaseViewModel` and collect it with `request()`.
+- The base class shows a loading overlay. On error it shows a dialog if there is content, or a full screen error with Retry if there isn't.
+- `BaseScreen` draws these states, so screens only draw their own content.
 
 ## Requirements from the brief
 
