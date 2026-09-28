@@ -11,18 +11,21 @@ import androidx.compose.runtime.remember
 fun NgamingCaseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dimens: NgamingCaseDimens = NgamingCaseDimens(),
+    typography: NgamingCaseTypography = DefaultTypography,
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
     val colorScheme = remember(colors) { colors.toColorScheme() }
+    val materialTypography = remember(typography) { typography.toTypography() }
 
     CompositionLocalProvider(
         LocalColors provides colors,
         LocalDimens provides dimens,
+        LocalTypography provides typography,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = NgamingCaseTypography,
+            typography = materialTypography,
             content = content,
         )
     }
@@ -38,4 +41,9 @@ object NgamingCaseTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalDimens.current
+
+    val typography: NgamingCaseTypography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalTypography.current
 }

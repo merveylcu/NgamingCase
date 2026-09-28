@@ -1,7 +1,6 @@
 package com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.compose
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +14,7 @@ internal fun PostDetailNotFoundContent(modifier: Modifier = Modifier) {
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Text(
             text = stringResource(R.string.post_detail_not_found),
-            style = MaterialTheme.typography.bodyLarge,
+            style = NgamingCaseTheme.typography.bodyLarge,
             color = NgamingCaseTheme.colors.onSurfaceVariant,
         )
     }

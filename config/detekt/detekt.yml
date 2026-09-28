@@ -619,9 +619,11 @@ style:
       - value: 'androidx.compose.ui.unit.dp'
         reason: 'Use NgamingCaseTheme.dimens instead of hardcoded dp values.'
       - value: 'androidx.compose.ui.unit.sp'
-        reason: 'Use NgamingCaseTheme.dimens or MaterialTheme.typography instead of hardcoded sp values.'
+        reason: 'Use NgamingCaseTheme.typography or NgamingCaseTheme.dimens instead of hardcoded sp values.'
       - value: 'androidx.compose.ui.graphics.Color'
         reason: 'Use NgamingCaseTheme.colors instead of hardcoded colors.'
+      - value: 'androidx.compose.material3.MaterialTheme'
+        reason: 'Use NgamingCaseTheme.colors, NgamingCaseTheme.typography and NgamingCaseTheme.dimens.'
     allowedImports: []
   ForbiddenMethodCall:
     active: false
@@ -858,6 +860,7 @@ Compose:
     allowedCompositionLocals:
       - LocalColors
       - LocalDimens
+      - LocalTypography
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
