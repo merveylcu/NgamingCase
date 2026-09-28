@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostListViewModel @Inject constructor(
-    observePosts: ObservePostsUseCase,
+    private val observePosts: ObservePostsUseCase,
     private val isPostCacheEmpty: IsPostCacheEmptyUseCase,
     private val refreshPosts: RefreshPostsUseCase,
     private val softDeletePost: SoftDeletePostUseCase,

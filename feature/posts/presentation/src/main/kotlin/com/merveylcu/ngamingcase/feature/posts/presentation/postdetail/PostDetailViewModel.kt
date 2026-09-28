@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class PostDetailViewModel @AssistedInject constructor(
     @Assisted private val postId: Int,
     private val savedStateHandle: SavedStateHandle,
-    observePost: ObservePostUseCase,
+    private val observePost: ObservePostUseCase,
     private val updatePost: UpdatePostUseCase,
 ) : ViewModel() {
 
