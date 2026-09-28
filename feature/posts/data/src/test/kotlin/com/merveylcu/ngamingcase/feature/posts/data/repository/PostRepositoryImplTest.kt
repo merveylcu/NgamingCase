@@ -75,7 +75,7 @@ class PostRepositoryImplTest {
 
     @Test
     fun `refresh maps an http failure to an http error`() = testScope.runTest {
-        coEvery { api.getPosts() } throws httpException(code = 500)
+        coEvery { api.getPosts() } throws 500.httpException()
 
         val result = repository(FakePostDao()).refresh()
 
@@ -141,7 +141,7 @@ class PostRepositoryImplTest {
     fun `update post leaves the database unchanged when the api fails`() = testScope.runTest {
         val original = entity(1)
         val dao = FakePostDao(listOf(original))
-        coEvery { api.updatePost(1, any()) } throws httpException(code = 500)
+        coEvery { api.updatePost(1, any()) } throws 500.httpException()
 
         val result = repository(dao).updatePost(id = 1, title = "new title", body = "new body")
 
@@ -166,6 +166,5 @@ class PostRepositoryImplTest {
         isLocallyModified = isLocallyModified,
     )
 
-    private fun httpException(code: Int) =
-        HttpException(Response.error<Any>(code, "".toResponseBody()))
+    private fun Int.httpException() = HttpException(Response.error<Any>(this, "".toResponseBody()))
 }

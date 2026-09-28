@@ -35,15 +35,15 @@ internal class FakePostDao(initial: List<PostEntity> = emptyList()) : PostDao {
         }.map { it.id }
 
     override suspend fun upsertAll(posts: List<PostEntity>) {
-        table.value = table.value + posts.associateBy { it.id }
+        table.value += posts.associateBy { it.id }
     }
 
     override suspend fun upsert(post: PostEntity) {
-        table.value = table.value + (post.id to post)
+        table.value += (post.id to post)
     }
 
     override suspend fun setDeleted(id: Int, deleted: Boolean) {
         val post = table.value[id] ?: return
-        table.value = table.value + (id to post.copy(isDeleted = deleted))
+        table.value += (id to post.copy(isDeleted = deleted))
     }
 }
