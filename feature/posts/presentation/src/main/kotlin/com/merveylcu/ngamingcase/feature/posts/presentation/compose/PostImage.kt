@@ -27,8 +27,9 @@ internal fun PostImage(
         placeholder = placeholder,
         error = placeholder,
         contentScale = ContentScale.Crop,
-        modifier = modifier
-            .size(size)
-            .clip(CircleShape),
+        modifier =
+            modifier
+                .size(size)
+                .clip(CircleShape),
     )
 }

@@ -29,10 +29,11 @@ internal fun PostListItem(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(PostItemPadding),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .padding(PostItemPadding),
         horizontalArrangement = Arrangement.spacedBy(PostItemPadding),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -61,11 +62,12 @@ private fun PostListItemPreview() {
     NgamingCaseTheme {
         Surface {
             PostListItem(
-                post = Post(
-                    id = 1,
-                    title = "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-                    body = "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas",
-                ),
+                post =
+                    Post(
+                        id = 1,
+                        title = "sunt aut facere repellat provident occaecati excepturi optio",
+                        body = "quia et suscipit suscipit recusandae consequuntur expedita et cum",
+                    ),
                 onClick = {},
             )
         }

@@ -10,10 +10,11 @@ import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
 class ThrowableExtTest {
-
     @Test
     fun `timeout maps to timeout`() {
-        assertThat(SocketTimeoutException().toErrorEntity()).isEqualTo(network(ErrorEntity.Network.NetworkReason.TIMEOUT))
+        assertThat(
+            SocketTimeoutException().toErrorEntity(),
+        ).isEqualTo(network(ErrorEntity.Network.NetworkReason.TIMEOUT))
     }
 
     @Test
@@ -25,17 +26,23 @@ class ThrowableExtTest {
 
     @Test
     fun `ssl failure maps to ssl`() {
-        assertThat(SSLException("handshake").toErrorEntity()).isEqualTo(network(ErrorEntity.Network.NetworkReason.SSL))
+        assertThat(
+            SSLException("handshake").toErrorEntity(),
+        ).isEqualTo(network(ErrorEntity.Network.NetworkReason.SSL))
     }
 
     @Test
     fun `socket failure maps to connection`() {
-        assertThat(SocketException().toErrorEntity()).isEqualTo(network(ErrorEntity.Network.NetworkReason.CONNECTION))
+        assertThat(
+            SocketException().toErrorEntity(),
+        ).isEqualTo(network(ErrorEntity.Network.NetworkReason.CONNECTION))
     }
 
     @Test
     fun `other io failure maps to unknown network error`() {
-        assertThat(IOException().toErrorEntity()).isEqualTo(network(ErrorEntity.Network.NetworkReason.UNKNOWN))
+        assertThat(
+            IOException().toErrorEntity(),
+        ).isEqualTo(network(ErrorEntity.Network.NetworkReason.UNKNOWN))
     }
 
     @Test

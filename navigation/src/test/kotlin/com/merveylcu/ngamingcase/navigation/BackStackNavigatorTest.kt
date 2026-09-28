@@ -5,7 +5,6 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class BackStackNavigatorTest {
-
     private data object Start : NavKey
 
     private data class Detail(val id: Int) : NavKey

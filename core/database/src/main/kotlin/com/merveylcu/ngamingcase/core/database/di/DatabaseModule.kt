@@ -16,14 +16,14 @@ private const val DATABASE_NAME = "ngamingcase.db"
 @Module
 @InstallIn(SingletonComponent::class)
 public object DatabaseModule {
-
     @Provides
     @Singleton
-    public fun provideDatabase(@ApplicationContext context: Context): NgamingCaseDatabase = Room.databaseBuilder(
-        context,
-        NgamingCaseDatabase::class.java,
-        DATABASE_NAME,
-    ).build()
+    public fun provideDatabase(@ApplicationContext context: Context): NgamingCaseDatabase = Room
+        .databaseBuilder(
+            context,
+            NgamingCaseDatabase::class.java,
+            DATABASE_NAME,
+        ).build()
 
     @Provides
     public fun providePostDao(database: NgamingCaseDatabase): PostDao = database.postDao()

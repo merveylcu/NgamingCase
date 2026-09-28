@@ -19,12 +19,12 @@ import retrofit2.Response
 import java.net.UnknownHostException
 
 class PostRepositoryImplTest {
-
     private val dispatcher = StandardTestDispatcher()
     private val testScope = TestScope(dispatcher)
     private val api: PostApi = mockk()
 
-    private fun repository(dao: FakePostDao) = PostRepositoryImpl(api = api, dao = dao, ioDispatcher = dispatcher)
+    private fun repository(dao: FakePostDao) =
+        PostRepositoryImpl(api = api, dao = dao, ioDispatcher = dispatcher)
 
     @Test
     fun `refresh success writes posts to the database`() = testScope.runTest {
@@ -39,14 +39,20 @@ class PostRepositoryImplTest {
 
     @Test
     fun `refresh does not overwrite deleted or locally modified posts`() = testScope.runTest {
-        val dao = FakePostDao(
+        val dao =
+            FakePostDao(
+                listOf(
+                    entity(1, title = "deleted", isDeleted = true),
+                    entity(2, title = "edited", isLocallyModified = true),
+                    entity(3, title = "old"),
+                ),
+            )
+        coEvery { api.getPosts() } returns
             listOf(
-                entity(1, title = "deleted", isDeleted = true),
-                entity(2, title = "edited", isLocallyModified = true),
-                entity(3, title = "old"),
-            ),
-        )
-        coEvery { api.getPosts() } returns listOf(dto(1, "remote 1"), dto(2, "remote 2"), dto(3, "remote 3"))
+                dto(1, "remote 1"),
+                dto(2, "remote 2"),
+                dto(3, "remote 3"),
+            )
 
         repository(dao).refresh()
 
@@ -63,7 +69,8 @@ class PostRepositoryImplTest {
 
         val result = repository(FakePostDao()).refresh()
 
-        assertThat(result).isEqualTo(RestResult.Error(ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET)))
+        val expected = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET)
+        assertThat(result).isEqualTo(RestResult.Error(expected))
     }
 
     @Test
@@ -117,7 +124,12 @@ class PostRepositoryImplTest {
         val result = repository(dao).updatePost(id = 1, title = "new title", body = "new body")
 
         assertThat(result).isEqualTo(RestResult.Success(Unit))
-        coVerify { api.updatePost(1, PostDto(userId = 1, id = 1, title = "new title", body = "new body")) }
+        coVerify {
+            api.updatePost(
+                1,
+                PostDto(userId = 1, id = 1, title = "new title", body = "new body"),
+            )
+        }
         with(dao.posts.single()) {
             assertThat(title).isEqualTo("new title")
             assertThat(body).isEqualTo("new body")
@@ -137,7 +149,8 @@ class PostRepositoryImplTest {
         assertThat(dao.posts.single()).isEqualTo(original)
     }
 
-    private fun dto(id: Int, title: String = "title $id") = PostDto(userId = 1, id = id, title = title, body = "body $id")
+    private fun dto(id: Int, title: String = "title $id") =
+        PostDto(userId = 1, id = id, title = title, body = "body $id")
 
     private fun entity(
         id: Int,
@@ -153,5 +166,6 @@ class PostRepositoryImplTest {
         isLocallyModified = isLocallyModified,
     )
 
-    private fun httpException(code: Int) = HttpException(Response.error<Any>(code, "".toResponseBody()))
+    private fun httpException(code: Int) =
+        HttpException(Response.error<Any>(code, "".toResponseBody()))
 }

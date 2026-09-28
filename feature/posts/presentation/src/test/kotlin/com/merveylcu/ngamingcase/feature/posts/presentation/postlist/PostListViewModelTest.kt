@@ -18,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class PostListViewModelTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -47,7 +46,13 @@ class PostListViewModelTest {
 
     @Test
     fun `empty cache and failed fetch shows the error state`() = runTest {
-        val repository = FakePostRepository().apply { refreshResult = RestResult.Error(networkError) }
+        val repository =
+            FakePostRepository().apply {
+                refreshResult =
+                    RestResult.Error(
+                        networkError,
+                    )
+            }
 
         viewModel(repository).uiState.test {
             val state = expectMostRecentItem()
@@ -59,7 +64,13 @@ class PostListViewModelTest {
 
     @Test
     fun `retry after an error loads the posts`() = runTest {
-        val repository = FakePostRepository().apply { refreshResult = RestResult.Error(networkError) }
+        val repository =
+            FakePostRepository().apply {
+                refreshResult =
+                    RestResult.Error(
+                        networkError,
+                    )
+            }
         val viewModel = viewModel(repository)
 
         viewModel.uiState.test {
@@ -112,9 +123,10 @@ class PostListViewModelTest {
 
     @Test
     fun `failed delete confirmation restores the post and emits an error effect`() = runTest {
-        val repository = FakePostRepository(initialPosts = posts(2)).apply {
-            confirmDeleteResult = RestResult.Error(networkError)
-        }
+        val repository =
+            FakePostRepository(initialPosts = posts(2)).apply {
+                confirmDeleteResult = RestResult.Error(networkError)
+            }
         val viewModel = viewModel(repository)
 
         viewModel.uiEffect.test {
@@ -128,5 +140,7 @@ class PostListViewModelTest {
         assertThat(repository.posts.map { it.id }).containsExactly(1, 2).inOrder()
     }
 
-    private fun posts(count: Int) = List(count) { index -> Post(id = index + 1, title = "title ${index + 1}", body = "body") }
+    private fun posts(count: Int) = List(count) { index ->
+        Post(id = index + 1, title = "title ${index + 1}", body = "body")
+    }
 }

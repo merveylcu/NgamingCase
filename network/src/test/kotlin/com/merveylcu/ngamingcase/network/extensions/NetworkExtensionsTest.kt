@@ -15,7 +15,6 @@ import retrofit2.Response
 import java.net.SocketTimeoutException
 
 class NetworkExtensionsTest {
-
     @Test
     fun `successful call returns success`() = runTest {
         assertThat(safeApiCall { "value" }).isEqualTo(RestResult.Success("value"))
@@ -23,7 +22,8 @@ class NetworkExtensionsTest {
 
     @Test
     fun `http failure maps to http error`() = runTest {
-        val result = safeApiCall<Unit> { throw HttpException(Response.error<Any>(404, "".toResponseBody())) }
+        val exception = HttpException(Response.error<Any>(404, "".toResponseBody()))
+        val result = safeApiCall<Unit> { throw exception }
 
         assertThat(result).isEqualTo(RestResult.Error(ErrorEntity.Http(404)))
     }
@@ -32,7 +32,8 @@ class NetworkExtensionsTest {
     fun `io failure maps to network error`() = runTest {
         val result = safeApiCall<Unit> { throw SocketTimeoutException() }
 
-        assertThat(result).isEqualTo(RestResult.Error(ErrorEntity.Network(ErrorEntity.Network.NetworkReason.TIMEOUT)))
+        val expected = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.TIMEOUT)
+        assertThat(result).isEqualTo(RestResult.Error(expected))
     }
 
     @Test

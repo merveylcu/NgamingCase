@@ -51,6 +51,8 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
 
+private val DividerStartPadding = PostItemPadding * 2 + PostImageSize
+
 @Composable
 fun PostListScreen(
     onPostClick: (Int) -> Unit,
@@ -101,7 +103,11 @@ private suspend fun showUndoDeleteSnackbar(
     onConfirm: () -> Unit,
 ) {
     val result = try {
-        snackbarHostState.showSnackbar(message = message, actionLabel = actionLabel, duration = SnackbarDuration.Short)
+        snackbarHostState.showSnackbar(
+            message = message,
+            actionLabel = actionLabel,
+            duration = SnackbarDuration.Short,
+        )
     } catch (e: CancellationException) {
         onConfirm()
         throw e
@@ -132,7 +138,10 @@ internal fun PostListContent(
             .fillMaxSize()
             .padding(innerPadding)
         when {
-            state.posts.isEmpty() && state.isLoading -> Box(contentModifier, contentAlignment = Alignment.Center) {
+            state.posts.isEmpty() && state.isLoading -> Box(
+                modifier = contentModifier,
+                contentAlignment = Alignment.Center,
+            ) {
                 CircularProgressIndicator()
             }
 
@@ -181,7 +190,7 @@ private fun PostList(
                     )
                 }
                 if (index < posts.lastIndex) {
-                    HorizontalDivider(modifier = Modifier.padding(start = PostItemPadding * 2 + PostImageSize))
+                    HorizontalDivider(modifier = Modifier.padding(start = DividerStartPadding))
                 }
             }
         }
@@ -192,7 +201,11 @@ private fun PostList(
 private fun RevealRestoredPostEffect(posts: ImmutableList<Post>, listState: LazyListState) {
     val previousIds = remember { mutableSetOf<Int>() }
     LaunchedEffect(posts) {
-        val insertedIndex = if (previousIds.isEmpty()) -1 else posts.indexOfFirst { it.id !in previousIds }
+        val insertedIndex = if (previousIds.isEmpty()) {
+            -1
+        } else {
+            posts.indexOfFirst { it.id !in previousIds }
+        }
         previousIds.clear()
         previousIds.addAll(posts.map { it.id })
         withFrameNanos { }
@@ -203,7 +216,11 @@ private fun RevealRestoredPostEffect(posts: ImmutableList<Post>, listState: Lazy
 }
 
 private val previewPosts = List(5) { index ->
-    Post(id = index + 1, title = "Post title ${index + 1}", body = "Short description of the post number ${index + 1}.")
+    Post(
+        id = index + 1,
+        title = "Post title ${index + 1}",
+        body = "Short description of the post number ${index + 1}.",
+    )
 }.toImmutableList()
 
 @Preview
@@ -241,7 +258,9 @@ private fun PostListContentEmptyPreview() {
 private fun PostListContentErrorPreview() {
     NgamingCaseTheme {
         PostListContent(
-            state = PostListUiState(error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET)),
+            state = PostListUiState(
+                error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
+            ),
             snackbarHostState = remember { SnackbarHostState() },
             onRefresh = {},
             onRetry = {},

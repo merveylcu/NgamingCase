@@ -7,20 +7,32 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 internal class FakePostDao(initial: List<PostEntity> = emptyList()) : PostDao {
-
     private val table = MutableStateFlow(initial.associateBy { it.id })
 
     val posts: List<PostEntity> get() = table.value.values.sortedBy { it.id }
 
-    override fun observeVisible(): Flow<List<PostEntity>> = table.map { rows -> rows.values.filterNot { it.isDeleted }.sortedBy { it.id } }
+    override fun observeVisible(): Flow<List<PostEntity>> = table.map { rows ->
+        rows.values
+            .filterNot {
+                it.isDeleted
+            }.sortedBy { it.id }
+    }
 
-    override fun observeById(id: Int): Flow<PostEntity?> = table.map { rows -> rows[id]?.takeUnless { it.isDeleted } }
+    override fun observeById(id: Int): Flow<PostEntity?> = table.map { rows ->
+        rows[id]?.takeUnless {
+            it.isDeleted
+        }
+    }
 
     override suspend fun getById(id: Int): PostEntity? = table.value[id]
 
     override suspend fun count(): Int = table.value.size
 
-    override suspend fun getProtectedIds(): List<Int> = table.value.values.filter { it.isDeleted || it.isLocallyModified }.map { it.id }
+    override suspend fun getProtectedIds(): List<Int> = table.value.values
+        .filter {
+            it.isDeleted ||
+                it.isLocallyModified
+        }.map { it.id }
 
     override suspend fun upsertAll(posts: List<PostEntity>) {
         table.value = table.value + posts.associateBy { it.id }

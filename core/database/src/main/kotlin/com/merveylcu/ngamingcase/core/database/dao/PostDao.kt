@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 public interface PostDao {
-
     @Query("SELECT * FROM posts WHERE isDeleted = 0 ORDER BY id")
     public fun observeVisible(): Flow<List<PostEntity>>
 

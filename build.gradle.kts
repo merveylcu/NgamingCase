@@ -15,23 +15,12 @@ spotless {
     kotlin {
         target("**/*.kt")
         targetExclude("**/build/**/*.kt")
-        ktlint(libs.versions.ktlint.get())
-            .editorConfigOverride(
-                mapOf(
-                    "ktlint_standard_filename" to "disabled",
-                    "ktlint_standard_function-naming" to "disabled",
-                    "ij_kotlin_allow_trailing_comma" to "true",
-                    "ij_kotlin_allow_trailing_comma_on_call_site" to "true",
-                    "max_line_length" to "140",
-                    "ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than" to "3",
-                    "ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than" to "3",
-                ),
-            )
+        ktlint(libs.versions.ktlint.get()).setEditorConfigPath(rootProject.file(".editorconfig"))
     }
     kotlinGradle {
         target("**/*.kts")
         targetExclude("**/build/**/*.kts")
-        ktlint(libs.versions.ktlint.get())
+        ktlint(libs.versions.ktlint.get()).setEditorConfigPath(rootProject.file(".editorconfig"))
     }
 }
 

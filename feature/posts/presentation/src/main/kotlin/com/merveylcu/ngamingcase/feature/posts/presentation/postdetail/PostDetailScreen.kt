@@ -53,10 +53,11 @@ fun PostDetailScreen(
     postId: Int,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PostDetailViewModel = hiltViewModel<PostDetailViewModel, PostDetailViewModel.Factory>(
-        key = postId.toString(),
-        creationCallback = { factory -> factory.create(postId) },
-    ),
+    viewModel: PostDetailViewModel =
+        hiltViewModel<PostDetailViewModel, PostDetailViewModel.Factory>(
+            key = postId.toString(),
+            creationCallback = { factory -> factory.create(postId) },
+        ),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -66,10 +67,13 @@ fun PostDetailScreen(
     LaunchedEffect(viewModel, snackbarHostState) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                PostDetailUiEffect.NavigateBack -> currentOnBack()
+                PostDetailUiEffect.NavigateBack -> {
+                    currentOnBack()
+                }
 
-                is PostDetailUiEffect.ShowError ->
+                is PostDetailUiEffect.ShowError -> {
                     snackbarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
+                }
             }
         }
     }
@@ -115,29 +119,39 @@ internal fun PostDetailContent(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
-        val contentModifier = Modifier
-            .fillMaxSize()
-            .padding(innerPadding)
+        val contentModifier =
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         when {
-            state.isLoading -> Box(contentModifier, contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+            state.isLoading -> {
+                Box(contentModifier, contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
             }
 
-            state.notFound || state.post == null -> Box(contentModifier, contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(R.string.post_detail_not_found),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            state.notFound || state.post == null -> {
+                Box(
+                    modifier = contentModifier,
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.post_detail_not_found),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            else -> {
+                PostDetailForm(
+                    post = state.post,
+                    state = state,
+                    onTitleChange = onTitleChange,
+                    onBodyChange = onBodyChange,
+                    modifier = contentModifier,
                 )
             }
-
-            else -> PostDetailForm(
-                post = state.post,
-                state = state,
-                onTitleChange = onTitleChange,
-                onBodyChange = onBodyChange,
-                modifier = contentModifier,
-            )
         }
     }
 
@@ -168,9 +182,10 @@ private fun PostDetailTopBar(
         actions = {
             if (isSaving) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .size(24.dp),
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 16.dp)
+                            .size(24.dp),
                     strokeWidth = 2.dp,
                 )
             } else if (showSave) {
@@ -210,10 +225,11 @@ private fun PostDetailForm(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .imePadding()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+        modifier =
+            modifier
+                .imePadding()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -225,11 +241,12 @@ private fun PostDetailForm(
             singleLine = true,
             enabled = !state.isSaving,
             isError = !state.isTitleValid,
-            supportingText = if (state.isTitleValid) {
-                null
-            } else {
-                { Text(text = stringResource(R.string.post_detail_title_empty)) }
-            },
+            supportingText =
+                if (state.isTitleValid) {
+                    null
+                } else {
+                    { Text(text = stringResource(R.string.post_detail_title_empty)) }
+                },
             modifier = Modifier.fillMaxWidth(),
         )
         OutlinedTextField(
@@ -243,23 +260,25 @@ private fun PostDetailForm(
     }
 }
 
-private val previewPost = Post(
-    id = 1,
-    title = "sunt aut facere repellat provident occaecati",
-    body = "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae",
-)
+private val previewPost =
+    Post(
+        id = 1,
+        title = "sunt aut facere repellat provident occaecati",
+        body = "quia et suscipit suscipit recusandae consequuntur expedita et cum",
+    )
 
 @Preview
 @Composable
 private fun PostDetailContentPreview() {
     NgamingCaseTheme {
         PostDetailContent(
-            state = PostDetailUiState(
-                post = previewPost,
-                title = previewPost.title,
-                body = previewPost.body,
-                isLoading = false,
-            ),
+            state =
+                PostDetailUiState(
+                    post = previewPost,
+                    title = previewPost.title,
+                    body = previewPost.body,
+                    isLoading = false,
+                ),
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onSave = {},
@@ -276,12 +295,13 @@ private fun PostDetailContentPreview() {
 private fun PostDetailContentEmptyTitlePreview() {
     NgamingCaseTheme {
         PostDetailContent(
-            state = PostDetailUiState(
-                post = previewPost,
-                title = "",
-                body = previewPost.body,
-                isLoading = false,
-            ),
+            state =
+                PostDetailUiState(
+                    post = previewPost,
+                    title = "",
+                    body = previewPost.body,
+                    isLoading = false,
+                ),
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onSave = {},

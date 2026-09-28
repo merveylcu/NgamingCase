@@ -12,27 +12,34 @@ import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
 public fun Throwable.toErrorEntity(): ErrorEntity = when (this) {
-    is SocketTimeoutException ->
+    is SocketTimeoutException -> {
         ErrorEntity.Network(ErrorEntity.Network.NetworkReason.TIMEOUT)
+    }
 
     is UnknownHostException,
     is ConnectException,
-    ->
+    -> {
         ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET)
+    }
 
-    is SSLException ->
+    is SSLException -> {
         ErrorEntity.Network(ErrorEntity.Network.NetworkReason.SSL)
+    }
 
     is ProtocolException,
     is PortUnreachableException,
     is NoRouteToHostException,
     is SocketException,
     is InterruptedIOException,
-    ->
+    -> {
         ErrorEntity.Network(ErrorEntity.Network.NetworkReason.CONNECTION)
+    }
 
-    is IOException ->
+    is IOException -> {
         ErrorEntity.Network(ErrorEntity.Network.NetworkReason.UNKNOWN)
+    }
 
-    else -> ErrorEntity.Unknown
+    else -> {
+        ErrorEntity.Unknown
+    }
 }

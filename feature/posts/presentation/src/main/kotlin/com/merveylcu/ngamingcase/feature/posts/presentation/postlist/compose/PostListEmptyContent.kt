@@ -15,9 +15,10 @@ import com.merveylcu.ngamingcase.feature.posts.presentation.R
 @Composable
 internal fun PostListEmptyContent(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
     ) {
         Text(

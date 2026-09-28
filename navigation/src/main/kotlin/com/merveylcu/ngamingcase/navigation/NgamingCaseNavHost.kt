@@ -25,9 +25,10 @@ public fun NgamingCaseNavHost(
         modifier = modifier,
         onBack = navigator::navigateBack,
         entryProvider = entryProvider { entries(navigator) },
-        entryDecorators = listOf(
-            rememberSaveableStateHolderNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator(),
-        ),
+        entryDecorators =
+            listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
     )
 }

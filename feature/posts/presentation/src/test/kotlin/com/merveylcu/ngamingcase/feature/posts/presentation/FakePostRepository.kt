@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepository {
-
     private val visible = MutableStateFlow(initialPosts)
     private val deleted = mutableMapOf<Int, Post>()
 
@@ -23,7 +22,9 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
 
     override fun observePosts(): Flow<List<Post>> = visible
 
-    override fun observePost(id: Int): Flow<Post?> = visible.map { posts -> posts.find { it.id == id } }
+    override fun observePost(id: Int): Flow<Post?> = visible.map { posts ->
+        posts.find { it.id == id }
+    }
 
     override suspend fun isEmpty(): Boolean = visible.value.isEmpty() && deleted.isEmpty()
 
@@ -59,7 +60,8 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
         body: String,
     ): RestResult<Unit> {
         if (updateResult is RestResult.Success) {
-            visible.value = visible.value.map { if (it.id == id) it.copy(title = title, body = body) else it }
+            visible.value =
+                visible.value.map { if (it.id == id) it.copy(title = title, body = body) else it }
         }
         return updateResult
     }

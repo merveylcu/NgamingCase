@@ -21,5 +21,7 @@ internal fun Project.configureDetekt() {
 }
 
 private val Project.libs
-    get() = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension::class.java)
-        .named("libs")
+    get() =
+        extensions
+            .getByType(org.gradle.api.artifacts.VersionCatalogsExtension::class.java)
+            .named("libs")

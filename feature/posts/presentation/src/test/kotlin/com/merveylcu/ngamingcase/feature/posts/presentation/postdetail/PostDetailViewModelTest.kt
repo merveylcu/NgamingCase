@@ -15,7 +15,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class PostDetailViewModelTest {
-
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -89,7 +88,11 @@ class PostDetailViewModelTest {
 
     @Test
     fun `failed save shows an error and keeps the edited text`() = runTest {
-        val repository = FakePostRepository(listOf(post)).apply { updateResult = RestResult.Error(networkError) }
+        val repository =
+            FakePostRepository(listOf(post)).apply {
+                updateResult =
+                    RestResult.Error(networkError)
+            }
         val viewModel = viewModel(repository)
 
         viewModel.uiState.test {

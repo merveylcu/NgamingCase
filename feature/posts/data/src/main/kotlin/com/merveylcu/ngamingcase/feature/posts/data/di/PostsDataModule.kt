@@ -15,7 +15,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class PostsDataModule {
-
     @Binds
     abstract fun bindPostRepository(impl: PostRepositoryImpl): PostRepository
 

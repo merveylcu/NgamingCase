@@ -35,13 +35,14 @@ class PostListViewModel @Inject constructor(
 
     private val requestState = MutableStateFlow(PostListUiState(isLoading = true))
 
-    val uiState: StateFlow<PostListUiState> = combine(observePosts(), requestState) { posts, state ->
-        state.copy(posts = posts.toImmutableList())
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
-        initialValue = requestState.value,
-    )
+    val uiState: StateFlow<PostListUiState> =
+        combine(observePosts(), requestState) { posts, state ->
+            state.copy(posts = posts.toImmutableList())
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
+            initialValue = requestState.value,
+        )
 
     private val _uiEffect = Channel<PostListUiEffect>(Channel.BUFFERED)
     val uiEffect: Flow<PostListUiEffect> = _uiEffect.receiveAsFlow()

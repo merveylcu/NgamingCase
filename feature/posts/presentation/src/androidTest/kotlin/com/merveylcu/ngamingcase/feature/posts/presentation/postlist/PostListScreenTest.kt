@@ -24,7 +24,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PostListScreenTest {
-
     @get:Rule
     val composeRule = createComposeRule()
 
@@ -32,7 +31,8 @@ class PostListScreenTest {
     @Before
     fun setUp() {
         SingletonImageLoader.setUnsafe(
-            ImageLoader.Builder(ApplicationProvider.getApplicationContext())
+            ImageLoader
+                .Builder(ApplicationProvider.getApplicationContext())
                 .serviceLoaderEnabled(false)
                 .build(),
         )
@@ -61,12 +61,14 @@ class PostListScreenTest {
     fun postsAreRenderedAndClickable() {
         var clickedId: Int? = null
         setContent(
-            state = PostListUiState(
-                posts = persistentListOf(
-                    Post(id = 1, title = "First title", body = "First body"),
-                    Post(id = 2, title = "Second title", body = "Second body"),
+            state =
+                PostListUiState(
+                    posts =
+                        persistentListOf(
+                            Post(id = 1, title = "First title", body = "First body"),
+                            Post(id = 2, title = "Second title", body = "Second body"),
+                        ),
                 ),
-            ),
             onPostClick = { clickedId = it },
         )
 
@@ -88,7 +90,10 @@ class PostListScreenTest {
     fun errorStateShowsMessageAndRetry() {
         var retried = false
         setContent(
-            state = PostListUiState(error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET)),
+            state =
+                PostListUiState(
+                    error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
+                ),
             onRetry = { retried = true },
         )
 

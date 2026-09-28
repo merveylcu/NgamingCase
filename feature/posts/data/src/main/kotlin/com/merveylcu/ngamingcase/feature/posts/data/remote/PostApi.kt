@@ -8,7 +8,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 internal interface PostApi {
-
     @GET("posts")
     suspend fun getPosts(): List<PostDto>
 

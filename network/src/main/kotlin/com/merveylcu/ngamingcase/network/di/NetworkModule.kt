@@ -20,7 +20,6 @@ private const val TIMEOUT_SECONDS = 15L
 @Module
 @InstallIn(SingletonComponent::class)
 public object NetworkModule {
-
     @Provides
     @Singleton
     public fun provideJson(): Json = Json {
@@ -30,7 +29,8 @@ public object NetworkModule {
 
     @Provides
     @Singleton
-    public fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+    public fun provideOkHttpClient(): OkHttpClient = OkHttpClient
+        .Builder()
         .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
         .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -42,8 +42,7 @@ public object NetworkModule {
                     },
                 )
             }
-        }
-        .build()
+        }.build()
 
     @Provides
     @BaseUrl
@@ -55,7 +54,8 @@ public object NetworkModule {
         okHttpClient: OkHttpClient,
         json: Json,
         @BaseUrl baseUrl: String,
-    ): Retrofit = Retrofit.Builder()
+    ): Retrofit = Retrofit
+        .Builder()
         .baseUrl(baseUrl)
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))

@@ -42,9 +42,13 @@ internal class PostRepositoryImpl @Inject constructor(
             .mapOnSuccess { posts -> dao.mergeRemote(posts.map { it.toEntity() }) }
     }
 
-    override suspend fun softDelete(id: Int): Unit = withContext(ioDispatcher) { dao.setDeleted(id, deleted = true) }
+    override suspend fun softDelete(id: Int): Unit = withContext(ioDispatcher) {
+        dao.setDeleted(id, deleted = true)
+    }
 
-    override suspend fun restore(id: Int): Unit = withContext(ioDispatcher) { dao.setDeleted(id, deleted = false) }
+    override suspend fun restore(id: Int): Unit = withContext(ioDispatcher) {
+        dao.setDeleted(id, deleted = false)
+    }
 
     override suspend fun confirmDelete(id: Int): RestResult<Unit> = withContext(ioDispatcher) {
         val result = safeApiCall { api.deletePost(id) }

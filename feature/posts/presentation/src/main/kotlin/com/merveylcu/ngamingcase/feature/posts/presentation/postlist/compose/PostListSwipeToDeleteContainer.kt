@@ -25,7 +25,8 @@ internal fun PostListSwipeToDeleteContainer(
     content: @Composable () -> Unit,
 ) {
     val positionalThreshold = SwipeToDismissBoxDefaults.positionalThreshold
-    val state = remember { SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold) }
+    val state =
+        remember { SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold) }
 
     SwipeToDismissBox(
         state = state,
@@ -36,10 +37,11 @@ internal fun PostListSwipeToDeleteContainer(
         },
         backgroundContent = {
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.errorContainer)
-                    .padding(horizontal = PostItemPadding),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.errorContainer)
+                        .padding(horizontal = PostItemPadding),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
