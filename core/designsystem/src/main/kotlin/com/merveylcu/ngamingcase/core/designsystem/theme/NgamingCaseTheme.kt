@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 @Composable
 fun NgamingCaseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dimens: Dimens = Dimens(),
+    dimens: NgamingCaseDimens = NgamingCaseDimens(),
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) DarkColors else LightColors
@@ -34,7 +34,7 @@ object NgamingCaseTheme {
         @ReadOnlyComposable
         get() = LocalColors.current
 
-    val dimens: Dimens
+    val dimens: NgamingCaseDimens
         @Composable
         @ReadOnlyComposable
         get() = LocalDimens.current

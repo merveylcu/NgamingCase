@@ -6,7 +6,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Immutable
-data class Dimens(
+data class NgamingCaseDimens(
     val spacingXs: Dp = 4.dp,
     val spacingSm: Dp = 8.dp,
     val spacingMd: Dp = 16.dp,
@@ -19,4 +19,4 @@ data class Dimens(
     val progressStrokeWidth: Dp = 2.dp,
 )
 
-internal val LocalDimens = staticCompositionLocalOf { Dimens() }
+internal val LocalDimens = staticCompositionLocalOf { NgamingCaseDimens() }
