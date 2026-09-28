@@ -13,11 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
 import com.merveylcu.ngamingcase.feature.posts.presentation.compose.PostImage
 
-private val DetailImageSize = 120.dp
 private const val BODY_MIN_LINES = 4
 
 @Composable
@@ -35,11 +34,11 @@ internal fun PostDetailForm(
         modifier = modifier
             .imePadding()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(NgamingCaseTheme.dimens.spacingMd),
+        verticalArrangement = Arrangement.spacedBy(NgamingCaseTheme.dimens.spacingMd),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        PostImage(url = imageUrl, size = DetailImageSize)
+        PostImage(url = imageUrl, size = NgamingCaseTheme.dimens.imageLg)
         OutlinedTextField(
             value = title,
             onValueChange = onTitleChange,

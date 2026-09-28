@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
 import com.merveylcu.ngamingcase.core.designsystem.R as DesignR
 
@@ -42,9 +42,9 @@ internal fun PostDetailTopBar(
             if (isSaving) {
                 CircularProgressIndicator(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .size(24.dp),
-                    strokeWidth = 2.dp,
+                        .padding(horizontal = NgamingCaseTheme.dimens.spacingMd)
+                        .size(NgamingCaseTheme.dimens.iconMd),
+                    strokeWidth = NgamingCaseTheme.dimens.progressStrokeWidth,
                 )
             } else if (showSave) {
                 TextButton(onClick = onSave, enabled = canSave) {

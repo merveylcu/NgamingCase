@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.core.designsystem.R as DesignR
 
 @Composable
@@ -41,7 +42,7 @@ internal fun PostListSwipeToDeleteContainer(
                     Modifier
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.errorContainer)
-                        .padding(horizontal = PostItemPadding),
+                        .padding(horizontal = NgamingCaseTheme.dimens.spacingMd),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {

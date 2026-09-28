@@ -17,10 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import kotlinx.collections.immutable.ImmutableList
-
-private val DividerStartPadding = PostItemPadding * 2 + PostImageSize
 
 @Composable
 internal fun PostList(
@@ -32,6 +31,8 @@ internal fun PostList(
     val currentOnPostClick by rememberUpdatedState(onPostClick)
     val currentOnDelete by rememberUpdatedState(onDelete)
     val listState = rememberLazyListState()
+    val dimens = NgamingCaseTheme.dimens
+    val dividerStartPadding = dimens.spacingMd * 2 + dimens.imageSm
 
     RevealRestoredPostEffect(posts = posts, listState = listState)
 
@@ -46,7 +47,7 @@ internal fun PostList(
                     )
                 }
                 if (index < posts.lastIndex) {
-                    HorizontalDivider(modifier = Modifier.padding(start = DividerStartPadding))
+                    HorizontalDivider(modifier = Modifier.padding(start = dividerStartPadding))
                 }
             }
         }

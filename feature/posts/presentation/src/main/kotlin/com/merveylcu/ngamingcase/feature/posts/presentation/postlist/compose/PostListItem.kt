@@ -12,12 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import com.merveylcu.ngamingcase.feature.posts.presentation.compose.PostImage
-
-internal val PostImageSize = 56.dp
-internal val PostItemPadding = 16.dp
 
 @Composable
 internal fun PostListItem(
@@ -30,11 +27,11 @@ internal fun PostListItem(
             modifier
                 .fillMaxWidth()
                 .clickable(onClick = onClick)
-                .padding(PostItemPadding),
-        horizontalArrangement = Arrangement.spacedBy(PostItemPadding),
+                .padding(NgamingCaseTheme.dimens.spacingMd),
+        horizontalArrangement = Arrangement.spacedBy(NgamingCaseTheme.dimens.spacingMd),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        PostImage(url = post.imageUrl, size = PostImageSize)
+        PostImage(url = post.imageUrl, size = NgamingCaseTheme.dimens.imageSm)
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = post.title,

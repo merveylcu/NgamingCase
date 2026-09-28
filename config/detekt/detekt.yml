@@ -613,8 +613,13 @@ style:
         value: 'STOPSHIP:'
     allowedPatterns: ''
   ForbiddenImport:
-    active: false
-    forbiddenImports: []
+    active: true
+    excludes: ['**/core/designsystem/src/main/kotlin/**/theme/**']
+    forbiddenImports:
+      - value: 'androidx.compose.ui.unit.dp'
+        reason: 'Use NgamingCaseTheme.dimens instead of hardcoded dp values.'
+      - value: 'androidx.compose.ui.unit.sp'
+        reason: 'Use NgamingCaseTheme.dimens or MaterialTheme.typography instead of hardcoded sp values.'
     allowedImports: []
   ForbiddenMethodCall:
     active: false
