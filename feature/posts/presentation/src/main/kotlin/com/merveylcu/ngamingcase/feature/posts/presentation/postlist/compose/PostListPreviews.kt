@@ -1,7 +1,7 @@
 package com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,11 +60,11 @@ private fun PostListErrorPreview() {
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun PostListItemPreview() {
     NgamingCaseTheme {
-        Surface {
+        Box {
             PostListItem(
                 post = Post(
                     id = 1,

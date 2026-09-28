@@ -3,13 +3,12 @@ package com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.compose
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.merveylcu.ngamingcase.core.designsystem.component.progress.NgamingProgressIndicator
+import com.merveylcu.ngamingcase.core.designsystem.component.scaffold.NgamingScaffold
 import com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.PostDetailUiState
 
 @Composable
@@ -24,7 +23,8 @@ internal fun PostDetailContent(
     onDiscardDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold(
+    NgamingScaffold(
+        snackBarHostState = snackBarHostState,
         modifier = modifier.fillMaxSize(),
         topBar = {
             PostDetailTopBar(
@@ -35,7 +35,6 @@ internal fun PostDetailContent(
                 onSave = onSave,
             )
         },
-        snackbarHost = { SnackbarHost(snackBarHostState) },
     ) { innerPadding ->
         val contentModifier = Modifier
             .fillMaxSize()
@@ -43,7 +42,7 @@ internal fun PostDetailContent(
         when {
             state.isLoading -> {
                 Box(contentModifier, contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    NgamingProgressIndicator()
                 }
             }
 

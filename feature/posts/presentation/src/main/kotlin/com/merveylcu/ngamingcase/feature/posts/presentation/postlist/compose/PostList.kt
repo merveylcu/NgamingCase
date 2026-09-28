@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -16,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import com.merveylcu.ngamingcase.core.designsystem.component.divider.NgamingDivider
+import com.merveylcu.ngamingcase.core.designsystem.component.swipe.NgamingSwipeToDeleteBox
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import kotlinx.collections.immutable.ImmutableList
@@ -37,7 +38,7 @@ internal fun PostList(
     LazyColumn(state = listState, modifier = modifier.fillMaxSize()) {
         itemsIndexed(items = posts, key = { _, post -> post.id }) { index, post ->
             Column(modifier = Modifier.animateItem(fadeOutSpec = null)) {
-                PostListSwipeToDeleteContainer(onDelete = { currentOnDelete(post.id) }) {
+                NgamingSwipeToDeleteBox(onDelete = { currentOnDelete(post.id) }) {
                     PostListItem(
                         post = post,
                         onClick = { currentOnPostClick(post.id) },
@@ -45,7 +46,7 @@ internal fun PostList(
                     )
                 }
                 if (index < posts.lastIndex) {
-                    HorizontalDivider(modifier = Modifier.padding(start = dividerStartPadding))
+                    NgamingDivider(modifier = Modifier.padding(start = dividerStartPadding))
                 }
             }
         }

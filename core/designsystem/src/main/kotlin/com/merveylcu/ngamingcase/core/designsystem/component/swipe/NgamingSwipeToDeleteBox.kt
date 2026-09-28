@@ -1,11 +1,10 @@
-package com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose
+package com.merveylcu.ngamingcase.core.designsystem.component.swipe
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxDefaults
 import androidx.compose.material3.SwipeToDismissBoxState
@@ -15,18 +14,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import com.merveylcu.ngamingcase.core.designsystem.R
+import com.merveylcu.ngamingcase.core.designsystem.component.icon.NgamingIcon
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
-import com.merveylcu.ngamingcase.core.designsystem.R as DesignR
 
 @Composable
-internal fun PostListSwipeToDeleteContainer(
+fun NgamingSwipeToDeleteBox(
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val positionalThreshold = SwipeToDismissBoxDefaults.positionalThreshold
-    val state =
-        remember { SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold) }
+    val state = remember {
+        SwipeToDismissBoxState(SwipeToDismissBoxValue.Settled, positionalThreshold)
+    }
 
     SwipeToDismissBox(
         state = state,
@@ -37,16 +38,15 @@ internal fun PostListSwipeToDeleteContainer(
         },
         backgroundContent = {
             Row(
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .background(NgamingCaseTheme.colors.errorContainer)
-                        .padding(horizontal = NgamingCaseTheme.spacing.md),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NgamingCaseTheme.colors.errorContainer)
+                    .padding(horizontal = NgamingCaseTheme.spacing.md),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(
-                    painter = painterResource(DesignR.drawable.ic_delete),
+                NgamingIcon(
+                    painter = painterResource(R.drawable.ic_delete),
                     contentDescription = null,
                     tint = NgamingCaseTheme.colors.onErrorContainer,
                 )

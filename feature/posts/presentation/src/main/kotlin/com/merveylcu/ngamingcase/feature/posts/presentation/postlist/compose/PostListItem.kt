@@ -6,11 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.merveylcu.ngamingcase.core.designsystem.component.text.NgamingText
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import com.merveylcu.ngamingcase.feature.posts.presentation.compose.PostImage
@@ -32,13 +32,13 @@ internal fun PostListItem(
     ) {
         PostImage(url = post.imageUrl, size = NgamingCaseTheme.dimens.imageSm)
         Column(modifier = Modifier.weight(1f)) {
-            Text(
+            NgamingText(
                 text = post.title,
                 style = NgamingCaseTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(
+            NgamingText(
                 text = post.body,
                 style = NgamingCaseTheme.typography.bodyMedium,
                 color = NgamingCaseTheme.colors.onSurfaceVariant,

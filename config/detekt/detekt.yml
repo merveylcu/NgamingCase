@@ -614,7 +614,7 @@ style:
     allowedPatterns: ''
   ForbiddenImport:
     active: true
-    excludes: ['**/core/designsystem/src/main/kotlin/**/theme/**']
+    excludes: ['**/core/designsystem/src/main/kotlin/**']
     forbiddenImports:
       - value: 'androidx.compose.ui.unit.dp'
         reason: 'Use NgamingCaseTheme.dimens instead of hardcoded dp values.'
@@ -628,7 +628,12 @@ style:
         reason: 'Use NgamingCaseTheme.shapes instead of hardcoded shapes.'
       - value: 'androidx.compose.foundation.shape.RoundedCornerShape'
         reason: 'Use NgamingCaseTheme.shapes instead of hardcoded shapes.'
-    allowedImports: []
+      - value: 'androidx.compose.material3.*'
+        reason: 'Use the Ngaming* components from core:designsystem instead of Material components.'
+    allowedImports:
+      - 'androidx.compose.material3.SnackbarDuration'
+      - 'androidx.compose.material3.SnackbarHostState'
+      - 'androidx.compose.material3.SnackbarResult'
   ForbiddenMethodCall:
     active: false
     methods:

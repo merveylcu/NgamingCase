@@ -55,7 +55,7 @@ The UI only observes Room. The network is used to fill and update Room.
 ```
 :app                          Application, MainActivity
 :core:common                  Result and error types, dispatcher qualifier
-:core:designsystem            Theme, icons, shared labels
+:core:designsystem            Theme tokens and Ngaming* UI components
 :core:ui                      Error to message mapping
 :core:database                Room database, DAO, entity
 :core:testing                 Test helpers
