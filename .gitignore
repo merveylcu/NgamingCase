@@ -54,5 +54,3 @@ obj/
 .kotlin/
 
 *.env
-
-.claude/settings.local.json

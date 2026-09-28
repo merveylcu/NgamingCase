@@ -58,8 +58,12 @@ private fun NgamingTextFieldPreview() {
             verticalArrangement = Arrangement.spacedBy(NgamingCaseTheme.spacing.sm),
         ) {
             NgamingTextField(value = "Post title", onValueChange = {}, label = "Title")
-            NgamingTextField(value = "", onValueChange = {
-            }, label = "Title", errorText = "Title can't be empty")
+            NgamingTextField(
+                value = "",
+                onValueChange = {},
+                label = "Title",
+                errorText = "Title can't be empty",
+            )
         }
     }
 }
