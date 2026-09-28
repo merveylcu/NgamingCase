@@ -54,22 +54,18 @@ import kotlin.coroutines.cancellation.CancellationException
 private val DividerStartPadding = PostItemPadding * 2 + PostImageSize
 
 @Composable
-fun PostListScreen(
-    onPostClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: PostListViewModel = hiltViewModel(),
-) {
+fun PostListScreen(onPostClick: (Int) -> Unit, viewModel: PostListViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
 
-    LaunchedEffect(viewModel, snackbarHostState) {
+    LaunchedEffect(viewModel, snackBarHostState) {
         viewModel.uiEffect.collect { effect ->
-            snackbarHostState.currentSnackbarData?.dismiss()
+            snackBarHostState.currentSnackbarData?.dismiss()
             when (effect) {
                 is PostListUiEffect.ShowUndoDelete -> launch {
-                    showUndoDeleteSnackbar(
-                        snackbarHostState = snackbarHostState,
+                    showUndoDeleteSnackBar(
+                        snackBarHostState = snackBarHostState,
                         message = resources.getString(R.string.post_list_deleted),
                         actionLabel = resources.getString(R.string.post_list_undo),
                         onUndo = { viewModel.onUndoDelete(effect.postId) },
@@ -78,7 +74,7 @@ fun PostListScreen(
                 }
 
                 is PostListUiEffect.ShowError -> launch {
-                    snackbarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
+                    snackBarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
                 }
             }
         }
@@ -86,24 +82,23 @@ fun PostListScreen(
 
     PostListContent(
         state = uiState,
-        snackbarHostState = snackbarHostState,
+        snackBarHostState = snackBarHostState,
         onRefresh = viewModel::onRefresh,
         onRetry = viewModel::onRetry,
         onPostClick = onPostClick,
         onDelete = viewModel::onDelete,
-        modifier = modifier,
     )
 }
 
-private suspend fun showUndoDeleteSnackbar(
-    snackbarHostState: SnackbarHostState,
+private suspend fun showUndoDeleteSnackBar(
+    snackBarHostState: SnackbarHostState,
     message: String,
     actionLabel: String,
     onUndo: () -> Unit,
     onConfirm: () -> Unit,
 ) {
     val result = try {
-        snackbarHostState.showSnackbar(
+        snackBarHostState.showSnackbar(
             message = message,
             actionLabel = actionLabel,
             duration = SnackbarDuration.Short,
@@ -122,7 +117,7 @@ private suspend fun showUndoDeleteSnackbar(
 @Composable
 internal fun PostListContent(
     state: PostListUiState,
-    snackbarHostState: SnackbarHostState,
+    snackBarHostState: SnackbarHostState,
     onRefresh: () -> Unit,
     onRetry: () -> Unit,
     onPostClick: (Int) -> Unit,
@@ -132,7 +127,7 @@ internal fun PostListContent(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = { TopAppBar(title = { Text(text = stringResource(R.string.post_list_title)) }) },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(snackBarHostState) },
     ) { innerPadding ->
         val contentModifier = Modifier
             .fillMaxSize()
@@ -212,61 +207,5 @@ private fun RevealRestoredPostEffect(posts: ImmutableList<Post>, listState: Lazy
         if (insertedIndex in 0 until listState.firstVisibleItemIndex) {
             listState.animateScrollToItem(insertedIndex)
         }
-    }
-}
-
-private val previewPosts = List(5) { index ->
-    Post(
-        id = index + 1,
-        title = "Post title ${index + 1}",
-        body = "Short description of the post number ${index + 1}.",
-        imageUrl = "",
-    )
-}.toImmutableList()
-
-@Preview
-@Composable
-private fun PostListContentPreview() {
-    NgamingCaseTheme {
-        PostListContent(
-            state = PostListUiState(posts = previewPosts),
-            snackbarHostState = remember { SnackbarHostState() },
-            onRefresh = {},
-            onRetry = {},
-            onPostClick = {},
-            onDelete = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PostListContentEmptyPreview() {
-    NgamingCaseTheme {
-        PostListContent(
-            state = PostListUiState(posts = persistentListOf()),
-            snackbarHostState = remember { SnackbarHostState() },
-            onRefresh = {},
-            onRetry = {},
-            onPostClick = {},
-            onDelete = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PostListContentErrorPreview() {
-    NgamingCaseTheme {
-        PostListContent(
-            state = PostListUiState(
-                error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
-            ),
-            snackbarHostState = remember { SnackbarHostState() },
-            onRefresh = {},
-            onRetry = {},
-            onPostClick = {},
-            onDelete = {},
-        )
     }
 }

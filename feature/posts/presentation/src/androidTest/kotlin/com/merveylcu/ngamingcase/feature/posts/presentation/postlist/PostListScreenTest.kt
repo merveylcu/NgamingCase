@@ -47,7 +47,7 @@ class PostListScreenTest {
             NgamingCaseTheme {
                 PostListContent(
                     state = state,
-                    snackbarHostState = SnackbarHostState(),
+                    snackBarHostState = SnackbarHostState(),
                     onRefresh = {},
                     onRetry = onRetry,
                     onPostClick = onPostClick,

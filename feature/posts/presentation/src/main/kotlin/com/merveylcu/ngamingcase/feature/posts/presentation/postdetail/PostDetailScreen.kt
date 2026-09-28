@@ -7,17 +7,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.merveylcu.ngamingcase.core.ui.extension.toMessageRes
+import com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.compose.PostDetailContent
 
 @Composable
 fun PostDetailScreen(
     postId: Int,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: PostDetailViewModel =
         hiltViewModel<PostDetailViewModel, PostDetailViewModel.Factory>(
             key = postId.toString(),
@@ -25,11 +24,11 @@ fun PostDetailScreen(
         ),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
     val resources = LocalResources.current
     val currentOnBack by rememberUpdatedState(onBack)
 
-    LaunchedEffect(viewModel, snackbarHostState) {
+    LaunchedEffect(viewModel, snackBarHostState) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 PostDetailUiEffect.NavigateBack -> {
@@ -37,7 +36,7 @@ fun PostDetailScreen(
                 }
 
                 is PostDetailUiEffect.ShowError -> {
-                    snackbarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
+                    snackBarHostState.showSnackbar(resources.getString(effect.error.toMessageRes()))
                 }
             }
         }
@@ -47,13 +46,12 @@ fun PostDetailScreen(
 
     PostDetailContent(
         state = uiState,
-        snackbarHostState = snackbarHostState,
+        snackBarHostState = snackBarHostState,
         onBack = viewModel::onBack,
         onSave = viewModel::onSave,
         onTitleChange = viewModel::onTitleChange,
         onBodyChange = viewModel::onBodyChange,
         onDiscardConfirm = viewModel::onDiscardConfirm,
         onDiscardDismiss = viewModel::onDiscardDismiss,
-        modifier = modifier,
     )
 }

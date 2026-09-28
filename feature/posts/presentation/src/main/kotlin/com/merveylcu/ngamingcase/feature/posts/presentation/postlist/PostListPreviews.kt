@@ -1,0 +1,75 @@
+package com.merveylcu.ngamingcase.feature.posts.presentation.postlist
+
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.tooling.preview.Preview
+import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
+import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
+import com.merveylcu.ngamingcase.feature.posts.presentation.postlist.compose.PostListItem
+import kotlinx.collections.immutable.toImmutableList
+
+private val previewPosts = List(5) { index ->
+    Post(
+        id = index + 1,
+        title = "Post title ${index + 1}",
+        body = "Short description of the post number ${index + 1}.",
+        imageUrl = "",
+    )
+}.toImmutableList()
+
+@Composable
+private fun PostListContentPreview(state: PostListUiState) {
+    NgamingCaseTheme {
+        PostListContent(
+            state = state,
+            snackBarHostState = remember { SnackbarHostState() },
+            onRefresh = {},
+            onRetry = {},
+            onPostClick = {},
+            onDelete = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PostListPreview() {
+    PostListContentPreview(state = PostListUiState(posts = previewPosts))
+}
+
+@Preview
+@Composable
+private fun PostListEmptyPreview() {
+    PostListContentPreview(state = PostListUiState())
+}
+
+@Preview
+@Composable
+private fun PostListErrorPreview() {
+    PostListContentPreview(
+        state = PostListUiState(
+            error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
+        ),
+    )
+}
+
+@Preview
+@Composable
+private fun PostListItemPreview() {
+    NgamingCaseTheme {
+        Surface {
+            PostListItem(
+                post = Post(
+                    id = 1,
+                    title = "sunt aut facere repellat provident occaecati excepturi optio",
+                    body = "quia et suscipit suscipit recusandae consequuntur expedita et cum",
+                    imageUrl = "",
+                ),
+                onClick = {},
+            )
+        }
+    }
+}
