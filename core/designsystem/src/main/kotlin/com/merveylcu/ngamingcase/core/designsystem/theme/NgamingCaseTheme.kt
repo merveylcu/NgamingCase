@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
 
 @Composable
 fun NgamingCaseTheme(
@@ -12,9 +13,15 @@ fun NgamingCaseTheme(
     dimens: Dimens = Dimens(),
     content: @Composable () -> Unit,
 ) {
-    CompositionLocalProvider(LocalDimens provides dimens) {
+    val colors = if (darkTheme) DarkColors else LightColors
+    val colorScheme = remember(colors) { colors.toColorScheme() }
+
+    CompositionLocalProvider(
+        LocalColors provides colors,
+        LocalDimens provides dimens,
+    ) {
         MaterialTheme(
-            colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
+            colorScheme = colorScheme,
             typography = NgamingCaseTypography,
             content = content,
         )
@@ -22,6 +29,11 @@ fun NgamingCaseTheme(
 }
 
 object NgamingCaseTheme {
+    val colors: Colors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalColors.current
+
     val dimens: Dimens
         @Composable
         @ReadOnlyComposable

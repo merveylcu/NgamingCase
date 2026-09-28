@@ -42,7 +42,7 @@ internal fun PostListItem(
             Text(
                 text = post.body,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = NgamingCaseTheme.colors.onSurfaceVariant,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )

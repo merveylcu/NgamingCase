@@ -40,7 +40,7 @@ internal fun PostListErrorContent(
         Icon(
             painter = painterResource(DesignR.drawable.ic_error),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.error,
+            tint = NgamingCaseTheme.colors.error,
             modifier = Modifier.size(NgamingCaseTheme.dimens.iconLg),
         )
         Text(

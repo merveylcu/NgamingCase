@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.presentation.R
 
 @Composable
@@ -24,7 +25,7 @@ internal fun PostListEmptyContent(modifier: Modifier = Modifier) {
         Text(
             text = stringResource(R.string.post_list_empty),
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = NgamingCaseTheme.colors.onSurfaceVariant,
         )
     }
 }

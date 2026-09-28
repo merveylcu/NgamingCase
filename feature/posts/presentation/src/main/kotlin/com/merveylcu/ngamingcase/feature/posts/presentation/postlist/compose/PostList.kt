@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,7 +42,7 @@ internal fun PostList(
                     PostListItem(
                         post = post,
                         onClick = { currentOnPostClick(post.id) },
-                        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                        modifier = Modifier.background(NgamingCaseTheme.colors.surface),
                     )
                 }
                 if (index < posts.lastIndex) {

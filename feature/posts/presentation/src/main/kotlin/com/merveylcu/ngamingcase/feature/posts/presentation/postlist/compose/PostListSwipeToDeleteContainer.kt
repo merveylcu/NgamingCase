@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxDefaults
 import androidx.compose.material3.SwipeToDismissBoxState
@@ -41,7 +40,7 @@ internal fun PostListSwipeToDeleteContainer(
                 modifier =
                     Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.errorContainer)
+                        .background(NgamingCaseTheme.colors.errorContainer)
                         .padding(horizontal = NgamingCaseTheme.dimens.spacingMd),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
@@ -49,7 +48,7 @@ internal fun PostListSwipeToDeleteContainer(
                 Icon(
                     painter = painterResource(DesignR.drawable.ic_delete),
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onErrorContainer,
+                    tint = NgamingCaseTheme.colors.onErrorContainer,
                 )
             }
         },
