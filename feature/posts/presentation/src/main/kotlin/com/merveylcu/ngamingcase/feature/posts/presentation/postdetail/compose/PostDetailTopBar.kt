@@ -42,7 +42,7 @@ internal fun PostDetailTopBar(
             if (isSaving) {
                 CircularProgressIndicator(
                     modifier = Modifier
-                        .padding(horizontal = NgamingCaseTheme.dimens.spacingMd)
+                        .padding(horizontal = NgamingCaseTheme.spacing.md)
                         .size(NgamingCaseTheme.iconSizes.medium),
                     strokeWidth = NgamingCaseTheme.dimens.progressStrokeWidth,
                 )

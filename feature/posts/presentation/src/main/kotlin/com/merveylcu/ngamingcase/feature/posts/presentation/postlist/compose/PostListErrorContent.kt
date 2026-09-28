@@ -29,9 +29,9 @@ internal fun PostListErrorContent(
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(NgamingCaseTheme.dimens.spacingXl),
+                .padding(NgamingCaseTheme.spacing.xl),
         verticalArrangement = Arrangement.spacedBy(
-            NgamingCaseTheme.dimens.spacingMd,
+            NgamingCaseTheme.spacing.md,
             Alignment.CenterVertically,
         ),
         horizontalAlignment = Alignment.CenterHorizontally,

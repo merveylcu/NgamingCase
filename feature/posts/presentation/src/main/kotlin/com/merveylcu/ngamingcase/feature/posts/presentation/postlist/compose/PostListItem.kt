@@ -26,8 +26,8 @@ internal fun PostListItem(
             modifier
                 .fillMaxWidth()
                 .clickable(onClick = onClick)
-                .padding(NgamingCaseTheme.dimens.spacingMd),
-        horizontalArrangement = Arrangement.spacedBy(NgamingCaseTheme.dimens.spacingMd),
+                .padding(NgamingCaseTheme.spacing.md),
+        horizontalArrangement = Arrangement.spacedBy(NgamingCaseTheme.spacing.md),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         PostImage(url = post.imageUrl, size = NgamingCaseTheme.dimens.imageSm)

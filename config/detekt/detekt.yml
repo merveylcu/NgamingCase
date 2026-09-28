@@ -866,6 +866,7 @@ Compose:
       - LocalDimens
       - LocalIconSizes
       - LocalShapes
+      - LocalSpacing
       - LocalTypography
   CompositionLocalNaming:
     active: true

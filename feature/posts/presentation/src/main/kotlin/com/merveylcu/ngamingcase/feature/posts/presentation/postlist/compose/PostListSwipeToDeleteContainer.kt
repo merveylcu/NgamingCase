@@ -41,7 +41,7 @@ internal fun PostListSwipeToDeleteContainer(
                     Modifier
                         .fillMaxSize()
                         .background(NgamingCaseTheme.colors.errorContainer)
-                        .padding(horizontal = NgamingCaseTheme.dimens.spacingMd),
+                        .padding(horizontal = NgamingCaseTheme.spacing.md),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {

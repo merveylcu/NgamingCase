@@ -10,6 +10,7 @@ import androidx.compose.runtime.remember
 @Composable
 fun NgamingCaseTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    spacing: NgamingCaseSpacing = NgamingCaseSpacing(),
     dimens: NgamingCaseDimens = NgamingCaseDimens(),
     typography: NgamingCaseTypography = DefaultTypography,
     shapes: NgamingCaseShapes = NgamingCaseShapes(),
@@ -23,6 +24,7 @@ fun NgamingCaseTheme(
 
     CompositionLocalProvider(
         LocalColors provides colors,
+        LocalSpacing provides spacing,
         LocalDimens provides dimens,
         LocalTypography provides typography,
         LocalShapes provides shapes,
@@ -42,6 +44,11 @@ object NgamingCaseTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalColors.current
+
+    val spacing: NgamingCaseSpacing
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalSpacing.current
 
     val dimens: NgamingCaseDimens
         @Composable

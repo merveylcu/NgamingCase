@@ -30,8 +30,7 @@ internal fun PostList(
     val currentOnPostClick by rememberUpdatedState(onPostClick)
     val currentOnDelete by rememberUpdatedState(onDelete)
     val listState = rememberLazyListState()
-    val dimens = NgamingCaseTheme.dimens
-    val dividerStartPadding = dimens.spacingMd * 2 + dimens.imageSm
+    val dividerStartPadding = NgamingCaseTheme.spacing.md * 2 + NgamingCaseTheme.dimens.imageSm
 
     RevealRestoredPostEffect(posts = posts, listState = listState)
 

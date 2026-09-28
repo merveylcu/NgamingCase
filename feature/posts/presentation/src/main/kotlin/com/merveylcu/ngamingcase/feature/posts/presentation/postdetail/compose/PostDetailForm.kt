@@ -34,8 +34,8 @@ internal fun PostDetailForm(
         modifier = modifier
             .imePadding()
             .verticalScroll(rememberScrollState())
-            .padding(NgamingCaseTheme.dimens.spacingMd),
-        verticalArrangement = Arrangement.spacedBy(NgamingCaseTheme.dimens.spacingMd),
+            .padding(NgamingCaseTheme.spacing.md),
+        verticalArrangement = Arrangement.spacedBy(NgamingCaseTheme.spacing.md),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PostImage(url = imageUrl, size = NgamingCaseTheme.dimens.imageLg)
