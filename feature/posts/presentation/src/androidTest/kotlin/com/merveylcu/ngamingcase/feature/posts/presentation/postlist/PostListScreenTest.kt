@@ -11,6 +11,7 @@ import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
 import coil3.serviceLoaderEnabled
+import com.merveylcu.ngamingcase.core.common.base.BaseUiState
 import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
@@ -40,7 +41,7 @@ class PostListScreenTest {
     }
 
     private fun setContent(
-        state: PostListUiState,
+        state: BaseUiState<PostListUiState>,
         onRetry: () -> Unit = {},
         onPostClick: (Int) -> Unit = {},
     ) {
@@ -62,7 +63,7 @@ class PostListScreenTest {
     fun postsAreRenderedAndClickable() {
         var clickedId: Int? = null
         setContent(
-            state =
+            state = BaseUiState.Content(
                 PostListUiState(
                     posts =
                         persistentListOf(
@@ -75,6 +76,7 @@ class PostListScreenTest {
                             ),
                         ),
                 ),
+            ),
             onPostClick = { clickedId = it },
         )
 
@@ -87,7 +89,7 @@ class PostListScreenTest {
 
     @Test
     fun emptyStateIsShown() {
-        setContent(state = PostListUiState())
+        setContent(state = BaseUiState.Content(PostListUiState()))
 
         composeRule.onNodeWithText("No posts").assertIsDisplayed()
     }
@@ -96,10 +98,9 @@ class PostListScreenTest {
     fun errorStateShowsMessageAndRetry() {
         var retried = false
         setContent(
-            state =
-                PostListUiState(
-                    error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
-                ),
+            state = BaseUiState.Error(
+                ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
+            ),
             onRetry = { retried = true },
         )
 

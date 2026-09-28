@@ -5,6 +5,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import com.merveylcu.ngamingcase.core.common.base.BaseUiState
 import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
@@ -21,7 +22,7 @@ private val previewPosts = List(5) { index ->
 }.toImmutableList()
 
 @Composable
-private fun PostListContentPreview(state: PostListUiState) {
+private fun PostListContentPreview(state: BaseUiState<PostListUiState>) {
     NgamingCaseTheme {
         PostListContent(
             state = state,
@@ -37,25 +38,27 @@ private fun PostListContentPreview(state: PostListUiState) {
 @Preview
 @Composable
 private fun PostListPreview() {
-    PostListContentPreview(
-        state = PostListUiState(
-            posts = previewPosts,
-        ),
-    )
+    PostListContentPreview(state = BaseUiState.Content(PostListUiState(posts = previewPosts)))
 }
 
 @Preview
 @Composable
 private fun PostListEmptyPreview() {
-    PostListContentPreview(state = PostListUiState())
+    PostListContentPreview(state = BaseUiState.Content(PostListUiState()))
+}
+
+@Preview
+@Composable
+private fun PostListLoadingPreview() {
+    PostListContentPreview(state = BaseUiState.Loading)
 }
 
 @Preview
 @Composable
 private fun PostListErrorPreview() {
     PostListContentPreview(
-        state = PostListUiState(
-            error = ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
+        state = BaseUiState.Error(
+            ErrorEntity.Network(ErrorEntity.Network.NetworkReason.NO_INTERNET),
         ),
     )
 }

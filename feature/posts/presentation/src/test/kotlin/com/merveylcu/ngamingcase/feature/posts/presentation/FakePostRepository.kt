@@ -3,6 +3,7 @@ package com.merveylcu.ngamingcase.feature.posts.presentation
 import com.merveylcu.ngamingcase.core.common.result.RestResult
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import com.merveylcu.ngamingcase.feature.posts.domain.repository.PostRepository
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -12,6 +13,7 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
     private val deleted = mutableMapOf<Int, Post>()
 
     var remotePosts: List<Post> = emptyList()
+    var refreshGate: CompletableDeferred<Unit>? = null
     var refreshResult: RestResult<Unit> = RestResult.Success(Unit)
     var confirmDeleteResult: RestResult<Unit> = RestResult.Success(Unit)
     var updateResult: RestResult<Unit> = RestResult.Success(Unit)
@@ -29,6 +31,7 @@ class FakePostRepository(initialPosts: List<Post> = emptyList()) : PostRepositor
     override suspend fun isEmpty(): Boolean = visible.value.isEmpty() && deleted.isEmpty()
 
     override suspend fun refresh(): RestResult<Unit> {
+        refreshGate?.await()
         if (refreshResult is RestResult.Success) {
             val merged = visible.value.associateBy { it.id } + remotePosts.associateBy { it.id }
             visible.value = merged.values.filterNot { it.id in deleted }.sortedBy { it.id }

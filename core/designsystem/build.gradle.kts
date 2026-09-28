@@ -9,5 +9,9 @@ configure<LibraryExtension> {
 }
 
 dependencies {
+    api(projects.core.common)
+    api(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(projects.core.ui)
+
     implementation(libs.bundles.compose)
 }

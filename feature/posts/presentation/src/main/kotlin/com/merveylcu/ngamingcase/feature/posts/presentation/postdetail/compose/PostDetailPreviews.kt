@@ -4,6 +4,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
+import com.merveylcu.ngamingcase.core.common.UiText
+import com.merveylcu.ngamingcase.core.common.base.BaseUiState
+import com.merveylcu.ngamingcase.core.common.base.DialogState
 import com.merveylcu.ngamingcase.core.designsystem.theme.NgamingCaseTheme
 import com.merveylcu.ngamingcase.feature.posts.domain.model.Post
 import com.merveylcu.ngamingcase.feature.posts.presentation.postdetail.PostDetailUiState
@@ -15,8 +18,14 @@ private val previewPost = Post(
     imageUrl = "",
 )
 
+private val previewContent = PostDetailUiState(
+    post = previewPost,
+    title = previewPost.title,
+    body = previewPost.body,
+)
+
 @Composable
-private fun PostDetailContentPreview(state: PostDetailUiState) {
+private fun PostDetailContentPreview(state: BaseUiState<PostDetailUiState>) {
     NgamingCaseTheme {
         PostDetailContent(
             state = state,
@@ -25,8 +34,6 @@ private fun PostDetailContentPreview(state: PostDetailUiState) {
             onSave = {},
             onTitleChange = {},
             onBodyChange = {},
-            onDiscardConfirm = {},
-            onDiscardDismiss = {},
         )
     }
 }
@@ -34,36 +41,35 @@ private fun PostDetailContentPreview(state: PostDetailUiState) {
 @Preview
 @Composable
 private fun PostDetailFormPreview() {
-    PostDetailContentPreview(
-        state = PostDetailUiState(
-            post = previewPost,
-            title = previewPost.title,
-            body = previewPost.body,
-            isLoading = false,
-        ),
-    )
+    PostDetailContentPreview(state = BaseUiState.Content(previewContent))
 }
 
 @Preview
 @Composable
 private fun PostDetailEmptyTitlePreview() {
-    PostDetailContentPreview(
-        state = PostDetailUiState(
-            post = previewPost,
-            title = "",
-            body = previewPost.body,
-            isLoading = false,
-        ),
-    )
+    PostDetailContentPreview(state = BaseUiState.Content(previewContent.copy(title = "")))
 }
 
 @Preview
 @Composable
 private fun PostDetailNotFoundPreview() {
+    PostDetailContentPreview(state = BaseUiState.Content(PostDetailUiState()))
+}
+
+@Preview
+@Composable
+private fun PostDetailDiscardDialogPreview() {
     PostDetailContentPreview(
-        state = PostDetailUiState(
-            isLoading = false,
-            notFound = true,
+        state = BaseUiState.Content(
+            data = previewContent.copy(title = "Edited title"),
+            dialogState = DialogState(
+                title = UiText.DynamicString("Discard changes?"),
+                message = UiText.DynamicString("Your unsaved changes will be lost."),
+                confirmText = UiText.DynamicString("Discard"),
+                dismissText = UiText.DynamicString("Keep editing"),
+                onConfirm = {},
+                onDismiss = {},
+            ),
         ),
     )
 }

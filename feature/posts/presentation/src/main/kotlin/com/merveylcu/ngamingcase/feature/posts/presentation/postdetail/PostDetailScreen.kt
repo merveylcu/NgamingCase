@@ -51,7 +51,5 @@ fun PostDetailScreen(
         onSave = viewModel::onSave,
         onTitleChange = viewModel::onTitleChange,
         onBodyChange = viewModel::onBodyChange,
-        onDiscardConfirm = viewModel::onDiscardConfirm,
-        onDiscardDismiss = viewModel::onDiscardDismiss,
     )
 }

@@ -1,8 +1,10 @@
 package com.merveylcu.ngamingcase.feature.posts.presentation.postlist
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.merveylcu.ngamingcase.core.common.base.BaseUiState
+import com.merveylcu.ngamingcase.core.common.result.ErrorEntity
 import com.merveylcu.ngamingcase.core.common.result.RestResult
+import com.merveylcu.ngamingcase.core.designsystem.base.BaseViewModel
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.ConfirmDeletePostUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.IsPostCacheEmptyUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.ObservePostsUseCase
@@ -11,14 +13,10 @@ import com.merveylcu.ngamingcase.feature.posts.domain.usecase.RestorePostUseCase
 import com.merveylcu.ngamingcase.feature.posts.domain.usecase.SoftDeletePostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,24 +29,26 @@ class PostListViewModel @Inject constructor(
     private val softDeletePost: SoftDeletePostUseCase,
     private val restorePost: RestorePostUseCase,
     private val confirmDeletePost: ConfirmDeletePostUseCase,
-) : ViewModel() {
+) : BaseViewModel<PostListUiState, PostListUiEffect>() {
 
-    private val requestState = MutableStateFlow(PostListUiState(isLoading = true))
-
-    val uiState: StateFlow<PostListUiState> =
-        combine(observePosts(), requestState) { posts, state ->
-            state.copy(posts = posts.toImmutableList())
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
-            initialValue = requestState.value,
-        )
-
-    private val _uiEffect =
-        MutableSharedFlow<PostListUiEffect>(extraBufferCapacity = EFFECT_BUFFER_CAPACITY)
-    val uiEffect: SharedFlow<PostListUiEffect> = _uiEffect.asSharedFlow()
+    private val requestState = MutableStateFlow(RequestState(isLoading = true))
 
     init {
+        combine(observePosts(), requestState) { posts, request ->
+            when {
+                posts.isEmpty() && request.isLoading -> BaseUiState.Loading
+
+                posts.isEmpty() && request.error != null -> BaseUiState.Error(request.error)
+
+                else -> BaseUiState.Content(
+                    PostListUiState(
+                        posts = posts.toImmutableList(),
+                        isRefreshing = request.isRefreshing,
+                    ),
+                )
+            }
+        }.onEach(::setState).launchIn(viewModelScope)
+
         viewModelScope.launch {
             if (isPostCacheEmpty()) {
                 load()
@@ -69,7 +69,7 @@ class PostListViewModel @Inject constructor(
                 if (isPostCacheEmpty()) {
                     requestState.update { it.copy(error = result.error) }
                 } else {
-                    _uiEffect.emit(PostListUiEffect.ShowError(result.error))
+                    emitEffect(PostListUiEffect.ShowError(result.error))
                 }
             } else {
                 requestState.update { it.copy(error = null) }
@@ -80,7 +80,7 @@ class PostListViewModel @Inject constructor(
     fun onDelete(postId: Int) {
         viewModelScope.launch {
             softDeletePost(postId)
-            _uiEffect.emit(PostListUiEffect.ShowUndoDelete(postId))
+            emitEffect(PostListUiEffect.ShowUndoDelete(postId))
         }
     }
 
@@ -91,7 +91,7 @@ class PostListViewModel @Inject constructor(
     fun onDeleteConfirm(postId: Int) {
         viewModelScope.launch {
             val result = confirmDeletePost(postId)
-            if (result is RestResult.Error) _uiEffect.emit(PostListUiEffect.ShowError(result.error))
+            if (result is RestResult.Error) emitEffect(PostListUiEffect.ShowError(result.error))
         }
     }
 
@@ -110,8 +110,9 @@ class PostListViewModel @Inject constructor(
         }
     }
 
-    private companion object {
-        const val STOP_TIMEOUT_MILLIS = 5_000L
-        const val EFFECT_BUFFER_CAPACITY = 16
-    }
+    private data class RequestState(
+        val isLoading: Boolean = false,
+        val isRefreshing: Boolean = false,
+        val error: ErrorEntity? = null,
+    )
 }
